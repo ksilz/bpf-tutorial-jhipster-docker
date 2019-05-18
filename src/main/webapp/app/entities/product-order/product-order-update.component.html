@@ -36,26 +36,26 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="mySimpleShopApp.productOrder.buyer" for="field_buyer">Buyer</label>
                     <select class="form-control" id="field_buyer" name="buyer" formControlName="buyerId">
-                        <option *ngIf="!editForm.get('buyer').value" [ngValue]="null" selected></option>
+                        <option *ngIf="!editForm.get('buyerId').value" [ngValue]="null" selected></option>
                         <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
                     </select>
                 </div>
-                <div *ngIf="editForm.get('buyer').invalid && (editForm.get('buyer').dirty || editForm.get('buyer').touched)">
+                <div *ngIf="editForm.get('buyerId').invalid && (editForm.get('buyerId').dirty || editForm.get('buyerId').touched)">
                     <small class="form-text text-danger"
-                           *ngIf="editForm.get('buyer').errors.required" jhiTranslate="entity.validation.required">
+                           *ngIf="editForm.get('buyerId').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="mySimpleShopApp.productOrder.product" for="field_product">Product</label>
                     <select class="form-control" id="field_product" name="product" formControlName="productId">
-                        <option *ngIf="!editForm.get('product').value" [ngValue]="null" selected></option>
+                        <option *ngIf="!editForm.get('productId').value" [ngValue]="null" selected></option>
                         <option [ngValue]="productOption.id" *ngFor="let productOption of products; trackBy: trackProductById">{{productOption.name}}</option>
                     </select>
                 </div>
-                <div *ngIf="editForm.get('product').invalid && (editForm.get('product').dirty || editForm.get('product').touched)">
+                <div *ngIf="editForm.get('productId').invalid && (editForm.get('productId').dirty || editForm.get('productId').touched)">
                     <small class="form-text text-danger"
-                           *ngIf="editForm.get('product').errors.required" jhiTranslate="entity.validation.required">
+                           *ngIf="editForm.get('productId').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>
