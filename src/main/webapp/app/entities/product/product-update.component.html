@@ -129,12 +129,6 @@
                     </div>
                 </div>
 
-                <div *ngIf="editForm.get('order').invalid && (editForm.get('order').dirty || editForm.get('order').touched)">
-                    <small class="form-text text-danger"
-                           *ngIf="editForm.get('order').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                    </small>
-                </div>
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
