@@ -66,7 +66,7 @@ eclipse {
 defaultTasks "bootRun"
 
 group = "com.betterprojectsfaster.tutorial.jhipsterdocker"
-version = "0.0.1-SNAPSHOT"
+version = "0.2"
 
 description = ""
 
