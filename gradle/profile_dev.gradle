@@ -13,10 +13,10 @@ if (project.hasProperty("tls")) {
 
 springBoot {
     buildInfo {
-		properties {
-			time = null
-		}
-	}
+        properties {
+            time = null
+        }
+    }
 }
 
 bootRun {
@@ -33,7 +33,8 @@ task webpackBuildDev(type: NpmTask) {
 
     outputs.dir("build/resources/main/static/")
 
-    dependsOn npmInstall
+    // removed dependency on nmp installation to speed things up and to work offline
+    /*dependsOn npmInstall*/
     args = ["run", "webpack:build"]
 }
 
