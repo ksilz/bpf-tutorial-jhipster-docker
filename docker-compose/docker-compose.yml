@@ -1,0 +1,6 @@
+version: '2'
+services:
+  jhipster-registry:
+    extends:
+      file: jhipster-registry.yml
+      service: jhipster-registry
