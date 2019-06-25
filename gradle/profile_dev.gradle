@@ -34,7 +34,7 @@ task webpackBuildDev(type: NpmTask) {
     outputs.dir("build/resources/main/static/")
 
     // removed dependency on nmp installation to speed things up and to work offline
-    /*dependsOn npmInstall*/
+    dependsOn npmInstall
     args = ["run", "webpack:build"]
 }
 
