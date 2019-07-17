@@ -2,7 +2,7 @@ application {
   config {
     baseName my_simple_shop
     applicationType monolith
-    packageName com.betterprojectsfaster.tutorial.jhipsterdocker
+    packageName com.betterprojectsfaster.test.jhipster
     authenticationType jwt
     buildTool gradle
     databaseType sql
@@ -52,7 +52,7 @@ entity Address {
 entity ShoppingOrder {
   name String required unique minlength(2) maxlength(90)
   totalAmount Float min(0)
-  ordered ZonedDateTime
+  ordered LocalDate
 }
 
 entity ProductOrder {
@@ -60,16 +60,16 @@ entity ProductOrder {
 }
 
 entity Shipment {
-  shippedAt ZonedDateTime required
+  shippedAt LocalDate required
 }
 
 relationship OneToOne {
-  Shipment{order(name) required} to ShoppingOrder{shipment(shippedAt) required}
+  Shipment{order(name) required} to ShoppingOrder{shipment(shippedAt)}
 }
 
 relationship OneToMany {
-  Product{order(name) required} to ProductOrder{product(name) required}
-  ShoppingOrder{orders required} to ProductOrder{overallOrder(name)}
+  Product to ProductOrder{product(name) required}
+  ShoppingOrder{orders} to ProductOrder{overallOrder(name) required}
 }
 
 relationship ManyToOne {
@@ -79,5 +79,5 @@ relationship ManyToOne {
   Shipment{shippedBy(login) required} to User
 }
 
-// service * with serviceImpl
+service * with serviceImpl
 dto * with mapstruct
