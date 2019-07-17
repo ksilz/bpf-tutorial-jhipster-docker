@@ -2,7 +2,7 @@ application {
   config {
     baseName my_simple_shop
     applicationType monolith
-    packageName com.betterprojectsfaster.test.jhipster
+    packageName com.betterprojectsfaster.tutorial.jhipsterdocker
     authenticationType jwt
     buildTool gradle
     databaseType sql
