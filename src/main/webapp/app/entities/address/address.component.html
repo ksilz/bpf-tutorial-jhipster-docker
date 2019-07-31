@@ -1,0 +1,67 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="mySimpleShopApp.address.home.title">Addresses</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-address" [routerLink]="['/address/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="mySimpleShopApp.address.home.createLabel">
+            Create new Address
+            </span>
+        </button>
+    </h2>
+    <bpf-alert></bpf-alert>
+    <br/>
+    <div class="alert alert-warning" *ngIf="addresses?.length === 0">
+        <span jhiTranslate="mySimpleShopApp.address.home.notFound">No addresses found</span>
+    </div>
+    <div class="table-responsive" *ngIf="addresses?.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="mySimpleShopApp.address.addressLine1">Address Line 1</span></th>
+            <th><span jhiTranslate="mySimpleShopApp.address.addressLine2">Address Line 2</span></th>
+            <th><span jhiTranslate="mySimpleShopApp.address.city">City</span></th>
+            <th><span jhiTranslate="mySimpleShopApp.address.postalCode">Postal Code</span></th>
+            <th><span jhiTranslate="mySimpleShopApp.address.user">User</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let address of addresses ;trackBy: trackId">
+                <td><a [routerLink]="['/address', address.id, 'view' ]">{{address.id}}</a></td>
+                <td>{{address.addressLine1}}</td>
+                <td>{{address.addressLine2}}</td>
+                <td>{{address.city}}</td>
+                <td>{{address.postalCode}}</td>
+                <td>
+                    {{address.userLogin}}
+                </td>
+                <td class="text-right">
+                    <div class="btn-group">
+                        <button type="submit"
+                                [routerLink]="['/address', address.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/address', address.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', 'address', { outlets: { popup: address.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

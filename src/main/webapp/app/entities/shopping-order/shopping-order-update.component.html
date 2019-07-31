@@ -1,0 +1,80 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="bpf-shopping-order-heading" jhiTranslate="mySimpleShopApp.shoppingOrder.home.createOrEditLabel">Create or edit a Shopping Order</h2>
+            <div>
+                <bpf-alert-error></bpf-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.shoppingOrder.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                           formControlName="name"/>
+                    <div *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('name').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('name').errors.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 2 }">
+                        This field is required to be at least 2 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('name').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 90 }">
+                        This field cannot be longer than 90 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.shoppingOrder.totalAmount" for="field_totalAmount">Total Amount</label>
+                    <input type="number" class="form-control" name="totalAmount" id="field_totalAmount"
+                           formControlName="totalAmount"/>
+                    <div *ngIf="editForm.get('totalAmount').invalid && (editForm.get('totalAmount').dirty || editForm.get('totalAmount').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('totalAmount').errors.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
+                            This field should be at least 0.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('totalAmount')?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.shoppingOrder.ordered" for="field_ordered">Ordered</label>
+                    <div class="input-group">
+                        <input id="field_ordered" type="text" class="form-control" name="ordered" ngbDatepicker  #orderedDp="ngbDatepicker" formControlName="ordered"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="orderedDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.shoppingOrder.buyer" for="field_buyer">Buyer</label>
+                    <select class="form-control" id="field_buyer" name="buyer" formControlName="buyerId">
+                        <option *ngIf="!editForm.get('buyerId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('buyerId').invalid && (editForm.get('buyerId').dirty || editForm.get('buyerId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('buyerId').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

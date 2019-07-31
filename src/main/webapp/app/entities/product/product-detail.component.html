@@ -1,0 +1,59 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="product">
+            <h2><span jhiTranslate="mySimpleShopApp.product.detail.title">Product</span> {{product.id}}</h2>
+            <hr>
+            <bpf-alert-error></bpf-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="mySimpleShopApp.product.name">Name</span></dt>
+                <dd>
+                    <span>{{product.name}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.product.price">Price</span></dt>
+                <dd>
+                    <span>{{product.price}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.product.description">Description</span></dt>
+                <dd>
+                    <span>{{product.description}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.product.picture">Picture</span></dt>
+                <dd>
+                    <div *ngIf="product.picture">
+                        <a (click)="openFile(product.pictureContentType, product.picture)">
+                            <img [src]="'data:' + product.pictureContentType + ';base64,' + product.picture" style="max-width: 100%;" alt="product image"/>
+                        </a>
+                        {{product.pictureContentType}}, {{byteSize(product.picture)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.product.specification">Specification</span></dt>
+                <dd>
+                    <div *ngIf="product.specification">
+                        <a (click)="openFile(product.specificationContentType, product.specification)" jhiTranslate="entity.action.open">open</a>
+                        {{product.specificationContentType}}, {{byteSize(product.specification)}}
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.product.category">Category</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'mySimpleShopApp.ProductCategory.' + product.category}}">{{product.category}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.product.inventory">Inventory</span></dt>
+                <dd>
+                    <span>{{product.inventory}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/product', product.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

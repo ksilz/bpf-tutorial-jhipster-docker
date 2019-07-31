@@ -1,0 +1,25 @@
+{
+  "mySimpleShopApp": {
+    "productOrder": {
+      "home": {
+        "title": "Product Orders",
+        "createLabel": "Product Order erstellen",
+        "createOrEditLabel": "Product Order erstellen oder bearbeiten",
+        "notFound": "No Product Order found"
+      },
+      "created": "Product Order erstellt mit ID {{ param }}",
+      "updated": "Product Order aktualisiert mit ID {{ param }}",
+      "deleted": "Product Order gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Product Order {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Product Order"
+      },
+      "amount": "Amount",
+      "buyer": "Buyer",
+      "product": "Product",
+      "overallOrder": "Overall Order"
+    }
+  }
+}

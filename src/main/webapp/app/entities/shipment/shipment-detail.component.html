@@ -1,0 +1,37 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="shipment">
+            <h2><span jhiTranslate="mySimpleShopApp.shipment.detail.title">Shipment</span> {{shipment.id}}</h2>
+            <hr>
+            <bpf-alert-error></bpf-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="mySimpleShopApp.shipment.shippedAt">Shipped At</span></dt>
+                <dd>
+                    <span>{{shipment.shippedAt}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.shipment.order">Order</span></dt>
+                <dd>
+                    <div *ngIf="shipment.orderId">
+                        <a [routerLink]="['/shopping-order', shipment.orderId, 'view']">{{shipment.orderName}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.shipment.shippedBy">Shipped By</span></dt>
+                <dd>
+                    {{shipment.shippedByLogin}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/shipment', shipment.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

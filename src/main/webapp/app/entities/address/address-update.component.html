@@ -1,0 +1,101 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="bpf-address-heading" jhiTranslate="mySimpleShopApp.address.home.createOrEditLabel">Create or edit a Address</h2>
+            <div>
+                <bpf-alert-error></bpf-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.address.addressLine1" for="field_addressLine1">Address Line 1</label>
+                    <input type="text" class="form-control" name="addressLine1" id="field_addressLine1"
+                           formControlName="addressLine1"/>
+                    <div *ngIf="editForm.get('addressLine1').invalid && (editForm.get('addressLine1').dirty || editForm.get('addressLine1').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('addressLine1').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('addressLine1').errors.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 2 }">
+                        This field is required to be at least 2 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('addressLine1').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 80 }">
+                        This field cannot be longer than 80 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.address.addressLine2" for="field_addressLine2">Address Line 2</label>
+                    <input type="text" class="form-control" name="addressLine2" id="field_addressLine2"
+                           formControlName="addressLine2"/>
+                    <div *ngIf="editForm.get('addressLine2').invalid && (editForm.get('addressLine2').dirty || editForm.get('addressLine2').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('addressLine2').errors.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 2 }">
+                        This field is required to be at least 2 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('addressLine2').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 80 }">
+                        This field cannot be longer than 80 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.address.city" for="field_city">City</label>
+                    <input type="text" class="form-control" name="city" id="field_city"
+                           formControlName="city"/>
+                    <div *ngIf="editForm.get('city').invalid && (editForm.get('city').dirty || editForm.get('city').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('city').errors.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 2 }">
+                        This field is required to be at least 2 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('city').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 80 }">
+                        This field cannot be longer than 80 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.address.postalCode" for="field_postalCode">Postal Code</label>
+                    <input type="text" class="form-control" name="postalCode" id="field_postalCode"
+                           formControlName="postalCode"/>
+                    <div *ngIf="editForm.get('postalCode').invalid && (editForm.get('postalCode').dirty || editForm.get('postalCode').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('postalCode').errors.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 5 }">
+                        This field is required to be at least 5 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('postalCode').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 5 }">
+                        This field cannot be longer than 5 characters.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.address.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" formControlName="userId">
+                        <option *ngIf="!editForm.get('userId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('userId').invalid && (editForm.get('userId').dirty || editForm.get('userId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('userId').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

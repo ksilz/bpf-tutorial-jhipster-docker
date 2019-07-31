@@ -1,0 +1,63 @@
+{
+    "name": "ShoppingOrder",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": 2,
+            "fieldValidateRulesMaxlength": 90
+        },
+        {
+            "fieldName": "totalAmount",
+            "fieldType": "Float",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "ordered",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "productOrder",
+            "otherEntityRelationshipName": "overallOrder",
+            "relationshipName": "orders"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "shoppingOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "buyer",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "shipment",
+            "otherEntityRelationshipName": "order",
+            "relationshipName": "shipment",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20190731160338",
+    "entityTableName": "shopping_order",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": [
+        "my_simple_shop"
+    ]
+}

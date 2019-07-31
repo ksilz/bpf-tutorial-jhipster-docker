@@ -1,0 +1,26 @@
+{
+  "mySimpleShopApp": {
+    "address": {
+      "home": {
+        "title": "Addresses",
+        "createLabel": "Address erstellen",
+        "createOrEditLabel": "Address erstellen oder bearbeiten",
+        "notFound": "No Address found"
+      },
+      "created": "Address erstellt mit ID {{ param }}",
+      "updated": "Address aktualisiert mit ID {{ param }}",
+      "deleted": "Address gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Address {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Address"
+      },
+      "addressLine1": "Address Line 1",
+      "addressLine2": "Address Line 2",
+      "city": "City",
+      "postalCode": "Postal Code",
+      "user": "User"
+    }
+  }
+}

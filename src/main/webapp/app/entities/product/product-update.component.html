@@ -1,0 +1,143 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="bpf-product-heading" jhiTranslate="mySimpleShopApp.product.home.createOrEditLabel">Create or edit a Product</h2>
+            <div>
+                <bpf-alert-error></bpf-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.product.name" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                           formControlName="name"/>
+                    <div *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('name').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('name').errors.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 2 }">
+                        This field is required to be at least 2 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('name').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 90 }">
+                        This field cannot be longer than 90 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.product.price" for="field_price">Price</label>
+                    <input type="number" class="form-control" name="price" id="field_price"
+                           formControlName="price"/>
+                    <div *ngIf="editForm.get('price').invalid && (editForm.get('price').dirty || editForm.get('price').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('price').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('price').errors.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
+                            This field should be at least 0.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('price')?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.product.description" for="field_description">Description</label>
+                    <textarea class="form-control" name="description" id="field_description"
+                              formControlName="description"></textarea>
+                    <div *ngIf="editForm.get('description').invalid && (editForm.get('description').dirty || editForm.get('description').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('description').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.product.picture" for="field_picture">Picture</label>
+                    <div>
+                        <img [src]="'data:' + editForm.get('pictureContentType').value + ';base64,' + editForm.get('picture').value" style="max-height: 100px;" *ngIf="editForm.get('picture').value" alt="product image"/>
+                        <div *ngIf="editForm.get('picture').value" class="form-text text-danger clearfix">
+                            <span class="pull-left">{{editForm.get('pictureContentType').value}}, {{byteSize(editForm.get('picture').value)}}</span>
+                            <button type="button" (click)="clearInputImage('picture', 'pictureContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_picture" (change)="setFileData($event, 'picture', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="picture" id="field_picture"
+                           formControlName="picture"/>
+                    <input type="hidden" class="form-control" name="pictureContentType" id="field_pictureContentType"
+                           formControlName="pictureContentType" />
+                    <div *ngIf="editForm.get('picture').invalid && (editForm.get('picture').dirty || editForm.get('picture').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('picture').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.product.specification" for="field_specification">Specification</label>
+                    <div>
+                        <div *ngIf="editForm.get('specification').value" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(editForm.get('specificationContentType').value, editForm.get('specification').value)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{editForm.get('specificationContentType').value}}, {{byteSize(editForm.get('specification').value)}}</span>
+                            <button type="button" (click)="editForm.patchValue({specification: null});editForm.patchValue({specificationContentType: null});"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_specification" (change)="setFileData($event, 'specification', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="specification" id="field_specification"
+                           formControlName="specification"/>
+                    <input type="hidden" class="form-control" name="specificationContentType" id="field_specificationContentType"
+                           formControlName="specificationContentType" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.product.category" for="field_category">Category</label>
+                    <select class="form-control" name="category" formControlName="category" id="field_category">
+                        <option value="Laptop">{{'mySimpleShopApp.ProductCategory.Laptop' | translate}}</option>
+                        <option value="Desktop">{{'mySimpleShopApp.ProductCategory.Desktop' | translate}}</option>
+                        <option value="Phone">{{'mySimpleShopApp.ProductCategory.Phone' | translate}}</option>
+                        <option value="Tablet">{{'mySimpleShopApp.ProductCategory.Tablet' | translate}}</option>
+                        <option value="Accessory">{{'mySimpleShopApp.ProductCategory.Accessory' | translate}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.product.inventory" for="field_inventory">Inventory</label>
+                    <input type="number" class="form-control" name="inventory" id="field_inventory"
+                           formControlName="inventory"/>
+                    <div *ngIf="editForm.get('inventory').invalid && (editForm.get('inventory').dirty || editForm.get('inventory').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('inventory').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('inventory').errors.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
+                            This field should be at least 0.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('inventory')?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

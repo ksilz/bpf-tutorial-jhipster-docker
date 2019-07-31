@@ -1,0 +1,39 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="shoppingOrder">
+            <h2><span jhiTranslate="mySimpleShopApp.shoppingOrder.detail.title">Shopping Order</span> {{shoppingOrder.id}}</h2>
+            <hr>
+            <bpf-alert-error></bpf-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="mySimpleShopApp.shoppingOrder.name">Name</span></dt>
+                <dd>
+                    <span>{{shoppingOrder.name}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.shoppingOrder.totalAmount">Total Amount</span></dt>
+                <dd>
+                    <span>{{shoppingOrder.totalAmount}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.shoppingOrder.ordered">Ordered</span></dt>
+                <dd>
+                    <span>{{shoppingOrder.ordered}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.shoppingOrder.buyer">Buyer</span></dt>
+                <dd>
+                    {{shoppingOrder.buyerLogin}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/shopping-order', shoppingOrder.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
