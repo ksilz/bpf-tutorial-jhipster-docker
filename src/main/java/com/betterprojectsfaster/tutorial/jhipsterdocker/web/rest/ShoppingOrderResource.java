@@ -83,6 +83,7 @@ public class ShoppingOrderResource {
     /**
      * {@code GET  /shopping-orders} : get all the shoppingOrders.
      *
+
      * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of shoppingOrders in body.
      */

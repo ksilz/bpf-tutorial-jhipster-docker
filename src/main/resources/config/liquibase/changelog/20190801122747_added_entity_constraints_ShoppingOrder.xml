@@ -4,13 +4,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <!--
-        Added the constraints for entity Address.
+        Added the constraints for entity ShoppingOrder.
     -->
-    <changeSet id="20190731160337-2" author="jhipster">
+    <changeSet id="20190801122747-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="address"
-                                 constraintName="fk_address_user_id"
+        <addForeignKeyConstraint baseColumnNames="buyer_id"
+                                 baseTableName="shopping_order"
+                                 constraintName="fk_shopping_order_buyer_id"
                                  referencedColumnNames="id"
                                  referencedTableName="bpf_user"/>
 

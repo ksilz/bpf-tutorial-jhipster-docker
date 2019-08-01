@@ -4,7 +4,7 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-shipment" [routerLink]="['/shipment/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="mySimpleShopApp.shipment.home.createLabel">
-            Create new Shipment
+            Create a new Shipment
             </span>
         </button>
     </h2>
@@ -30,7 +30,7 @@
                 <td>{{shipment.shippedAt | date:'mediumDate'}}</td>
                 <td>
                     <div *ngIf="shipment.orderId">
-                        <a [routerLink]="['../shopping-order', shipment.orderId , 'view' ]" >{{shipment.orderName}}</a>
+                        <a [routerLink]="['/shopping-order', shipment.orderId , 'view' ]" >{{shipment.orderName}}</a>
                     </div>
                 </td>
                 <td>
@@ -51,7 +51,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'shipment', { outlets: { popup: shipment.id + '/delete'} }]"
+                                [routerLink]="['/shipment', { outlets: { popup: shipment.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

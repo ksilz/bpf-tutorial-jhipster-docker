@@ -82,6 +82,7 @@ public class ProductResource {
     /**
      * {@code GET  /products} : get all the products.
      *
+
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of products in body.
      */
     @GetMapping("/products")

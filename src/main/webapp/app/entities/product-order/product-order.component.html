@@ -4,7 +4,7 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-product-order" [routerLink]="['/product-order/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="mySimpleShopApp.productOrder.home.createLabel">
-            Create new Product Order
+            Create a new Product Order
             </span>
         </button>
     </h2>
@@ -34,12 +34,12 @@
                 </td>
                 <td>
                     <div *ngIf="productOrder.productId">
-                        <a [routerLink]="['../product', productOrder.productId , 'view' ]" >{{productOrder.productName}}</a>
+                        <a [routerLink]="['/product', productOrder.productId , 'view' ]" >{{productOrder.productName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="productOrder.overallOrderId">
-                        <a [routerLink]="['../shopping-order', productOrder.overallOrderId , 'view' ]" >{{productOrder.overallOrderName}}</a>
+                        <a [routerLink]="['/shopping-order', productOrder.overallOrderId , 'view' ]" >{{productOrder.overallOrderName}}</a>
                     </div>
                 </td>
                 <td class="text-right">
@@ -57,7 +57,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'product-order', { outlets: { popup: productOrder.id + '/delete'} }]"
+                                [routerLink]="['/product-order', { outlets: { popup: productOrder.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

@@ -17,7 +17,7 @@ export class BpfLoginModalComponent implements AfterViewInit {
   loginForm = this.fb.group({
     username: [''],
     password: [''],
-    rememberMe: [true]
+    rememberMe: [false]
   });
 
   constructor(

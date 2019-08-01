@@ -53,7 +53,7 @@ export class ShipmentUpdateComponent implements OnInit {
       )
       .subscribe(
         (res: IShoppingOrder[]) => {
-          if (!!this.editForm.get('orderId').value) {
+          if (!this.editForm.get('orderId').value) {
             this.orders = res;
           } else {
             this.shoppingOrderService

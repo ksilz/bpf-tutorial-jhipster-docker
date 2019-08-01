@@ -9,7 +9,6 @@
     "consoleOptions": [],
     "serviceDiscoveryType": "eureka",
     "dockerRepositoryName": "joedata",
-    "dockerPushCommand": "docker push",
-    "jwtSecretKey": "OGQxMTUyODBiZDAwNzgxNGU4YjJiNjlkNTQwOTg3MWFlMGNkYTQ4NGMwMTFiOWM2NjMzMDc0MmI5MzgyMWU5NGVhYzFkYTQ1NWM0M2VlZDE3ZjQwZmJlNmNkMTcxOGZmNmI0Nw=="
+    "dockerPushCommand": "docker push"
   }
 }

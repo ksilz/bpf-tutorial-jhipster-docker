@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.enumeration.ProductCategory;
 /**
- * Integration tests for the {@Link ProductResource} REST controller.
+ * Integration tests for the {@link ProductResource} REST controller.
  */
 @SpringBootTest(classes = MySimpleShopApp.class)
 public class ProductResourceIT {
@@ -43,6 +43,7 @@ public class ProductResourceIT {
 
     private static final Float DEFAULT_PRICE = 0F;
     private static final Float UPDATED_PRICE = 1F;
+    private static final Float SMALLER_PRICE = 0F - 1F;
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -62,6 +63,7 @@ public class ProductResourceIT {
 
     private static final Integer DEFAULT_INVENTORY = 0;
     private static final Integer UPDATED_INVENTORY = 1;
+    private static final Integer SMALLER_INVENTORY = 0 - 1;
 
     @Autowired
     private ProductRepository productRepository;

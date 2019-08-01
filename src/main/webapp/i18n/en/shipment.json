@@ -5,7 +5,7 @@
         "title": "Shipments",
         "createLabel": "Create a new Shipment",
         "createOrEditLabel": "Create or edit a Shipment",
-        "notFound": "No Shipment found"
+        "notFound": "No Shipments found"
       },
       "created": "A new Shipment is created with identifier {{ param }}",
       "updated": "A Shipment is updated with identifier {{ param }}",

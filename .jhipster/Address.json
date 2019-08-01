@@ -53,7 +53,7 @@
             "otherEntityField": "login"
         }
     ],
-    "changelogDate": "20190731160337",
+    "changelogDate": "20190801122746",
     "entityTableName": "address",
     "dto": "mapstruct",
     "pagination": "no",

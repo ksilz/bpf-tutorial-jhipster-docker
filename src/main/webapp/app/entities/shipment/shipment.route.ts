@@ -17,7 +17,7 @@ export class ShipmentResolve implements Resolve<IShipment> {
   constructor(private service: ShipmentService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IShipment> {
-    const id = route.params['id'] ? route.params['id'] : null;
+    const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
         filter((response: HttpResponse<Shipment>) => response.ok),

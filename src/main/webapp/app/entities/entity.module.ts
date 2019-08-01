@@ -6,23 +6,23 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'product',
-        loadChildren: './product/product.module#MySimpleShopProductModule'
+        loadChildren: () => import('./product/product.module').then(m => m.MySimpleShopProductModule)
       },
       {
         path: 'address',
-        loadChildren: './address/address.module#MySimpleShopAddressModule'
+        loadChildren: () => import('./address/address.module').then(m => m.MySimpleShopAddressModule)
       },
       {
         path: 'shopping-order',
-        loadChildren: './shopping-order/shopping-order.module#MySimpleShopShoppingOrderModule'
+        loadChildren: () => import('./shopping-order/shopping-order.module').then(m => m.MySimpleShopShoppingOrderModule)
       },
       {
         path: 'product-order',
-        loadChildren: './product-order/product-order.module#MySimpleShopProductOrderModule'
+        loadChildren: () => import('./product-order/product-order.module').then(m => m.MySimpleShopProductOrderModule)
       },
       {
         path: 'shipment',
-        loadChildren: './shipment/shipment.module#MySimpleShopShipmentModule'
+        loadChildren: () => import('./shipment/shipment.module').then(m => m.MySimpleShopShipmentModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

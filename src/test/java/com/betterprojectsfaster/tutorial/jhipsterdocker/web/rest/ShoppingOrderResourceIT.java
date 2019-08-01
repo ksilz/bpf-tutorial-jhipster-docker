@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@Link ShoppingOrderResource} REST controller.
+ * Integration tests for the {@link ShoppingOrderResource} REST controller.
  */
 @SpringBootTest(classes = MySimpleShopApp.class)
 public class ShoppingOrderResourceIT {
@@ -44,9 +44,11 @@ public class ShoppingOrderResourceIT {
 
     private static final Float DEFAULT_TOTAL_AMOUNT = 0F;
     private static final Float UPDATED_TOTAL_AMOUNT = 1F;
+    private static final Float SMALLER_TOTAL_AMOUNT = 0F - 1F;
 
     private static final LocalDate DEFAULT_ORDERED = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_ORDERED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_ORDERED = LocalDate.ofEpochDay(-1L);
 
     @Autowired
     private ShoppingOrderRepository shoppingOrderRepository;

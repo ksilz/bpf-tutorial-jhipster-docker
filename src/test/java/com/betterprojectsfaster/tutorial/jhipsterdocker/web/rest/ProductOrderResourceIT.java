@@ -34,13 +34,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@Link ProductOrderResource} REST controller.
+ * Integration tests for the {@link ProductOrderResource} REST controller.
  */
 @SpringBootTest(classes = MySimpleShopApp.class)
 public class ProductOrderResourceIT {
 
     private static final Integer DEFAULT_AMOUNT = 0;
     private static final Integer UPDATED_AMOUNT = 1;
+    private static final Integer SMALLER_AMOUNT = 0 - 1;
 
     @Autowired
     private ProductOrderRepository productOrderRepository;

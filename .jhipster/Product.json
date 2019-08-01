@@ -66,7 +66,7 @@
             "relationshipName": "productOrder"
         }
     ],
-    "changelogDate": "20190731160336",
+    "changelogDate": "20190801122745",
     "entityTableName": "product",
     "dto": "mapstruct",
     "pagination": "no",

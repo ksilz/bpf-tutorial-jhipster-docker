@@ -17,7 +17,7 @@ export class AddressResolve implements Resolve<IAddress> {
   constructor(private service: AddressService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IAddress> {
-    const id = route.params['id'] ? route.params['id'] : null;
+    const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
         filter((response: HttpResponse<Address>) => response.ok),

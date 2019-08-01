@@ -39,7 +39,7 @@
             "otherEntityField": "name"
         }
     ],
-    "changelogDate": "20190731160339",
+    "changelogDate": "20190801122748",
     "entityTableName": "product_order",
     "dto": "mapstruct",
     "pagination": "no",

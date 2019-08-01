@@ -4,7 +4,7 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-product" [routerLink]="['/product/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="mySimpleShopApp.product.home.createLabel">
-            Create new Product
+            Create a new Product
             </span>
         </button>
     </h2>
@@ -61,7 +61,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', 'product', { outlets: { popup: product.id + '/delete'} }]"
+                                [routerLink]="['/product', { outlets: { popup: product.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

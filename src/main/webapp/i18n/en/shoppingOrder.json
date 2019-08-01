@@ -5,7 +5,7 @@
         "title": "Shopping Orders",
         "createLabel": "Create a new Shopping Order",
         "createOrEditLabel": "Create or edit a Shopping Order",
-        "notFound": "No Shopping Order found"
+        "notFound": "No Shopping Orders found"
       },
       "created": "A new Shopping Order is created with identifier {{ param }}",
       "updated": "A Shopping Order is updated with identifier {{ param }}",

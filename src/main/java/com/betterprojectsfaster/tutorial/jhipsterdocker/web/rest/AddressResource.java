@@ -82,6 +82,7 @@ public class AddressResource {
     /**
      * {@code GET  /addresses} : get all the addresses.
      *
+
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of addresses in body.
      */
     @GetMapping("/addresses")

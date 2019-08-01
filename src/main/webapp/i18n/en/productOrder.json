@@ -5,7 +5,7 @@
         "title": "Product Orders",
         "createLabel": "Create a new Product Order",
         "createOrEditLabel": "Create or edit a Product Order",
-        "notFound": "No Product Order found"
+        "notFound": "No Product Orders found"
       },
       "created": "A new Product Order is created with identifier {{ param }}",
       "updated": "A Product Order is updated with identifier {{ param }}",

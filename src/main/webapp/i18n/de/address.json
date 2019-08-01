@@ -5,7 +5,7 @@
         "title": "Addresses",
         "createLabel": "Address erstellen",
         "createOrEditLabel": "Address erstellen oder bearbeiten",
-        "notFound": "No Address found"
+        "notFound": "No Addresses found"
       },
       "created": "Address erstellt mit ID {{ param }}",
       "updated": "Address aktualisiert mit ID {{ param }}",

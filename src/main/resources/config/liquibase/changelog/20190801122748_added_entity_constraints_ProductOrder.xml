@@ -6,7 +6,7 @@
     <!--
         Added the constraints for entity ProductOrder.
     -->
-    <changeSet id="20190731160339-2" author="jhipster">
+    <changeSet id="20190801122748-2" author="jhipster">
         
         <addForeignKeyConstraint baseColumnNames="buyer_id"
                                  baseTableName="product_order"

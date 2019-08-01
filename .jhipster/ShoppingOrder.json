@@ -49,7 +49,7 @@
             "ownerSide": false
         }
     ],
-    "changelogDate": "20190731160338",
+    "changelogDate": "20190801122747",
     "entityTableName": "shopping_order",
     "dto": "mapstruct",
     "pagination": "no",

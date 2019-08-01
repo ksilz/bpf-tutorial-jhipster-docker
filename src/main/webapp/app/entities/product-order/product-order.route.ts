@@ -17,7 +17,7 @@ export class ProductOrderResolve implements Resolve<IProductOrder> {
   constructor(private service: ProductOrderService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IProductOrder> {
-    const id = route.params['id'] ? route.params['id'] : null;
+    const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
         filter((response: HttpResponse<ProductOrder>) => response.ok),

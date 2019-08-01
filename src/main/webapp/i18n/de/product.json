@@ -5,7 +5,7 @@
         "title": "Products",
         "createLabel": "Product erstellen",
         "createOrEditLabel": "Product erstellen oder bearbeiten",
-        "notFound": "No Product found"
+        "notFound": "No Products found"
       },
       "created": "Product erstellt mit ID {{ param }}",
       "updated": "Product aktualisiert mit ID {{ param }}",

@@ -26,14 +26,16 @@
     "clientFramework": "angularX",
     "useSass": true,
     "clientPackageManager": "npm",
-    "jhipsterVersion": "6.1.2",
+    "jhipsterVersion": "6.2.0",
     "skipUserManagement": false,
-    "serverPort": "8080",
-    "jwtSecretKey": "M2Q0MzQ2NzY4YzRkMDUxYjIxOWYzYmVlMGJlMjc4YzRlZDliZmUwMjFjMGMwOGJkMmUwZDI5N2JiYzRkYzgyMWRmYzE5YTA4OWY4MmY5NmE5NzZiNjllYTA5YmJjODQzZWFlMDBmYTY2ZmExYmI2NWRkYjMxYjBkZTBkYWE3NzE=",
     "clientTheme": "none",
+    "clientThemeVariant": "",
+    "serverPort": "8080",
+    "jwtSecretKey": "ZjVkNThmYTUwYmFkMzRlNTU4MjI0NmM1MmRlOWUwYTgzOTc3NGZjZmU0MGQ1NGYyY2Y0NzRkZDYyZjcyNWQ5MjhjMTJiNDI0ZGMzOTRhMjYwMzE1MzkwMzkyZmQwMDA5MDNiYzUzZjBlODY5MzgwZWYwZWI4YjEyNjc1MTg3MTc=",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "otherModules": []
+    "otherModules": [],
+    "blueprints": []
   },
   "entities": ["Product", "Address", "ShoppingOrder", "ProductOrder", "Shipment"]
 }

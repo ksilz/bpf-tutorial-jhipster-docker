@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@Link AddressResource} REST controller.
+ * Integration tests for the {@link AddressResource} REST controller.
  */
 @SpringBootTest(classes = MySimpleShopApp.class)
 public class AddressResourceIT {

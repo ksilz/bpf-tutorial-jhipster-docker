@@ -82,6 +82,7 @@ public class ProductOrderResource {
     /**
      * {@code GET  /product-orders} : get all the productOrders.
      *
+
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of productOrders in body.
      */
     @GetMapping("/product-orders")

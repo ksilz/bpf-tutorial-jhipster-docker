@@ -35,13 +35,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Integration tests for the {@Link ShipmentResource} REST controller.
+ * Integration tests for the {@link ShipmentResource} REST controller.
  */
 @SpringBootTest(classes = MySimpleShopApp.class)
 public class ShipmentResourceIT {
 
     private static final LocalDate DEFAULT_SHIPPED_AT = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_SHIPPED_AT = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_SHIPPED_AT = LocalDate.ofEpochDay(-1L);
 
     @Autowired
     private ShipmentRepository shipmentRepository;

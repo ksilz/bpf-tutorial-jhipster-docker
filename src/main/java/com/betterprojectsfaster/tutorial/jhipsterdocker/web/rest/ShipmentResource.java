@@ -82,6 +82,7 @@ public class ShipmentResource {
     /**
      * {@code GET  /shipments} : get all the shipments.
      *
+
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of shipments in body.
      */
     @GetMapping("/shipments")
