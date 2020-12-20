@@ -1,40 +1,16 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core';
 
-import { MySimpleShopSharedModule } from 'app/shared';
-import {
-  ShipmentComponent,
-  ShipmentDetailComponent,
-  ShipmentUpdateComponent,
-  ShipmentDeletePopupComponent,
-  ShipmentDeleteDialogComponent,
-  shipmentRoute,
-  shipmentPopupRoute
-} from './';
-
-const ENTITY_STATES = [...shipmentRoute, ...shipmentPopupRoute];
+import { MySimpleShopSharedModule } from 'app/shared/shared.module';
+import { ShipmentComponent } from './shipment.component';
+import { ShipmentDetailComponent } from './shipment-detail.component';
+import { ShipmentUpdateComponent } from './shipment-update.component';
+import { ShipmentDeleteDialogComponent } from './shipment-delete-dialog.component';
+import { shipmentRoute } from './shipment.route';
 
 @NgModule({
-  imports: [MySimpleShopSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    ShipmentComponent,
-    ShipmentDetailComponent,
-    ShipmentUpdateComponent,
-    ShipmentDeleteDialogComponent,
-    ShipmentDeletePopupComponent
-  ],
-  entryComponents: [ShipmentComponent, ShipmentUpdateComponent, ShipmentDeleteDialogComponent, ShipmentDeletePopupComponent],
-  providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [MySimpleShopSharedModule, RouterModule.forChild(shipmentRoute)],
+  declarations: [ShipmentComponent, ShipmentDetailComponent, ShipmentUpdateComponent, ShipmentDeleteDialogComponent],
+  entryComponents: [ShipmentDeleteDialogComponent],
 })
-export class MySimpleShopShipmentModule {
-  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-    this.languageHelper.language.subscribe((languageKey: string) => {
-      if (languageKey) {
-        this.languageService.changeLanguage(languageKey);
-      }
-    });
-  }
-}
+export class MySimpleShopShipmentModule {}

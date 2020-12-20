@@ -34,12 +34,6 @@ public class ShipmentServiceImpl implements ShipmentService {
         this.shipmentMapper = shipmentMapper;
     }
 
-    /**
-     * Save a shipment.
-     *
-     * @param shipmentDTO the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public ShipmentDTO save(ShipmentDTO shipmentDTO) {
         log.debug("Request to save Shipment : {}", shipmentDTO);
@@ -48,11 +42,6 @@ public class ShipmentServiceImpl implements ShipmentService {
         return shipmentMapper.toDto(shipment);
     }
 
-    /**
-     * Get all the shipments.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<ShipmentDTO> findAll() {
@@ -63,12 +52,6 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
 
-    /**
-     * Get one shipment by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<ShipmentDTO> findOne(Long id) {
@@ -77,11 +60,6 @@ public class ShipmentServiceImpl implements ShipmentService {
             .map(shipmentMapper::toDto);
     }
 
-    /**
-     * Delete the shipment by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Shipment : {}", id);

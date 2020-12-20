@@ -1,17 +1,20 @@
-/* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { ProductOrderComponentsPage, ProductOrderDeleteDialog, ProductOrderUpdatePage } from './product-order.page-object';
+import {
+  ProductOrderComponentsPage,
+  /* ProductOrderDeleteDialog, */
+  ProductOrderUpdatePage,
+} from './product-order.page-object';
 
 const expect = chai.expect;
 
 describe('ProductOrder e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let productOrderUpdatePage: ProductOrderUpdatePage;
   let productOrderComponentsPage: ProductOrderComponentsPage;
-  /*let productOrderDeleteDialog: ProductOrderDeleteDialog;*/
+  let productOrderUpdatePage: ProductOrderUpdatePage;
+  /* let productOrderDeleteDialog: ProductOrderDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -26,6 +29,10 @@ describe('ProductOrder e2e test', () => {
     productOrderComponentsPage = new ProductOrderComponentsPage();
     await browser.wait(ec.visibilityOf(productOrderComponentsPage.title), 5000);
     expect(await productOrderComponentsPage.getTitle()).to.eq('mySimpleShopApp.productOrder.home.title');
+    await browser.wait(
+      ec.or(ec.visibilityOf(productOrderComponentsPage.entities), ec.visibilityOf(productOrderComponentsPage.noResult)),
+      1000
+    );
   });
 
   it('should load create ProductOrder page', async () => {
@@ -39,18 +46,21 @@ describe('ProductOrder e2e test', () => {
         const nbButtonsBeforeCreate = await productOrderComponentsPage.countDeleteButtons();
 
         await productOrderComponentsPage.clickOnCreateButton();
+
         await promise.all([
             productOrderUpdatePage.setAmountInput('5'),
             productOrderUpdatePage.buyerSelectLastOption(),
             productOrderUpdatePage.productSelectLastOption(),
             productOrderUpdatePage.overallOrderSelectLastOption(),
         ]);
+
         expect(await productOrderUpdatePage.getAmountInput()).to.eq('5', 'Expected amount value to be equals to 5');
+
         await productOrderUpdatePage.save();
         expect(await productOrderUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
         expect(await productOrderComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    });*/
+    }); */
 
   /* it('should delete last ProductOrder', async () => {
         const nbButtonsBeforeDelete = await productOrderComponentsPage.countDeleteButtons();
@@ -62,7 +72,7 @@ describe('ProductOrder e2e test', () => {
         await productOrderDeleteDialog.clickOnConfirmButton();
 
         expect(await productOrderComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });*/
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

@@ -34,12 +34,6 @@ public class ProductServiceImpl implements ProductService {
         this.productMapper = productMapper;
     }
 
-    /**
-     * Save a product.
-     *
-     * @param productDTO the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public ProductDTO save(ProductDTO productDTO) {
         log.debug("Request to save Product : {}", productDTO);
@@ -48,11 +42,6 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDto(product);
     }
 
-    /**
-     * Get all the products.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<ProductDTO> findAll() {
@@ -63,12 +52,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    /**
-     * Get one product by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<ProductDTO> findOne(Long id) {
@@ -77,11 +60,6 @@ public class ProductServiceImpl implements ProductService {
             .map(productMapper::toDto);
     }
 
-    /**
-     * Delete the product by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Product : {}", id);

@@ -27,7 +27,7 @@ public interface ShoppingOrderService {
     /**
      * Get all the ShoppingOrderDTO where Shipment is {@code null}.
      *
-     * @return the list of entities.
+     * @return the {@link List} of entities.
      */
     List<ShoppingOrderDTO> findAllWhereShipmentIsNull();
 

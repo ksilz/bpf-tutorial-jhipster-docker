@@ -1,17 +1,22 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MySimpleShopSharedCommonModule, BpfLoginModalComponent, HasAnyAuthorityDirective } from './';
+import { NgModule } from '@angular/core';
+import { MySimpleShopSharedLibsModule } from './shared-libs.module';
+import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
+import { AlertComponent } from './alert/alert.component';
+import { AlertErrorComponent } from './alert/alert-error.component';
+import { LoginModalComponent } from './login/login.component';
+import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 
 @NgModule({
-  imports: [MySimpleShopSharedCommonModule],
-  declarations: [BpfLoginModalComponent, HasAnyAuthorityDirective],
-  entryComponents: [BpfLoginModalComponent],
-  exports: [MySimpleShopSharedCommonModule, BpfLoginModalComponent, HasAnyAuthorityDirective],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [MySimpleShopSharedLibsModule],
+  declarations: [FindLanguageFromKeyPipe, AlertComponent, AlertErrorComponent, LoginModalComponent, HasAnyAuthorityDirective],
+  entryComponents: [LoginModalComponent],
+  exports: [
+    MySimpleShopSharedLibsModule,
+    FindLanguageFromKeyPipe,
+    AlertComponent,
+    AlertErrorComponent,
+    LoginModalComponent,
+    HasAnyAuthorityDirective,
+  ],
 })
-export class MySimpleShopSharedModule {
-  static forRoot() {
-    return {
-      ngModule: MySimpleShopSharedModule
-    };
-  }
-}
+export class MySimpleShopSharedModule {}

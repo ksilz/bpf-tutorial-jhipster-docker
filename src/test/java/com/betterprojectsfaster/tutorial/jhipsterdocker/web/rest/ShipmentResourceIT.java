@@ -8,27 +8,21 @@ import com.betterprojectsfaster.tutorial.jhipsterdocker.repository.ShipmentRepos
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.ShipmentService;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.ShipmentDTO;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.mapper.ShipmentMapper;
-import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
-import static com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,11 +32,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link ShipmentResource} REST controller.
  */
 @SpringBootTest(classes = MySimpleShopApp.class)
+@AutoConfigureMockMvc
+@WithMockUser
 public class ShipmentResourceIT {
 
     private static final LocalDate DEFAULT_SHIPPED_AT = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_SHIPPED_AT = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_SHIPPED_AT = LocalDate.ofEpochDay(-1L);
 
     @Autowired
     private ShipmentRepository shipmentRepository;
@@ -54,35 +49,12 @@ public class ShipmentResourceIT {
     private ShipmentService shipmentService;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restShipmentMockMvc;
 
     private Shipment shipment;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final ShipmentResource shipmentResource = new ShipmentResource(shipmentService);
-        this.restShipmentMockMvc = MockMvcBuilders.standaloneSetup(shipmentResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -146,11 +118,10 @@ public class ShipmentResourceIT {
     @Transactional
     public void createShipment() throws Exception {
         int databaseSizeBeforeCreate = shipmentRepository.findAll().size();
-
         // Create the Shipment
         ShipmentDTO shipmentDTO = shipmentMapper.toDto(shipment);
         restShipmentMockMvc.perform(post("/api/shipments")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(shipmentDTO)))
             .andExpect(status().isCreated());
 
@@ -172,7 +143,7 @@ public class ShipmentResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restShipmentMockMvc.perform(post("/api/shipments")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(shipmentDTO)))
             .andExpect(status().isBadRequest());
 
@@ -192,8 +163,9 @@ public class ShipmentResourceIT {
         // Create the Shipment, which fails.
         ShipmentDTO shipmentDTO = shipmentMapper.toDto(shipment);
 
+
         restShipmentMockMvc.perform(post("/api/shipments")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(shipmentDTO)))
             .andExpect(status().isBadRequest());
 
@@ -210,7 +182,7 @@ public class ShipmentResourceIT {
         // Get all the shipmentList
         restShipmentMockMvc.perform(get("/api/shipments?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(shipment.getId().intValue())))
             .andExpect(jsonPath("$.[*].shippedAt").value(hasItem(DEFAULT_SHIPPED_AT.toString())));
     }
@@ -224,11 +196,10 @@ public class ShipmentResourceIT {
         // Get the shipment
         restShipmentMockMvc.perform(get("/api/shipments/{id}", shipment.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(shipment.getId().intValue()))
             .andExpect(jsonPath("$.shippedAt").value(DEFAULT_SHIPPED_AT.toString()));
     }
-
     @Test
     @Transactional
     public void getNonExistingShipment() throws Exception {
@@ -254,7 +225,7 @@ public class ShipmentResourceIT {
         ShipmentDTO shipmentDTO = shipmentMapper.toDto(updatedShipment);
 
         restShipmentMockMvc.perform(put("/api/shipments")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(shipmentDTO)))
             .andExpect(status().isOk());
 
@@ -275,7 +246,7 @@ public class ShipmentResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restShipmentMockMvc.perform(put("/api/shipments")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(shipmentDTO)))
             .andExpect(status().isBadRequest());
 
@@ -294,49 +265,11 @@ public class ShipmentResourceIT {
 
         // Delete the shipment
         restShipmentMockMvc.perform(delete("/api/shipments/{id}", shipment.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
         List<Shipment> shipmentList = shipmentRepository.findAll();
         assertThat(shipmentList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Shipment.class);
-        Shipment shipment1 = new Shipment();
-        shipment1.setId(1L);
-        Shipment shipment2 = new Shipment();
-        shipment2.setId(shipment1.getId());
-        assertThat(shipment1).isEqualTo(shipment2);
-        shipment2.setId(2L);
-        assertThat(shipment1).isNotEqualTo(shipment2);
-        shipment1.setId(null);
-        assertThat(shipment1).isNotEqualTo(shipment2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ShipmentDTO.class);
-        ShipmentDTO shipmentDTO1 = new ShipmentDTO();
-        shipmentDTO1.setId(1L);
-        ShipmentDTO shipmentDTO2 = new ShipmentDTO();
-        assertThat(shipmentDTO1).isNotEqualTo(shipmentDTO2);
-        shipmentDTO2.setId(shipmentDTO1.getId());
-        assertThat(shipmentDTO1).isEqualTo(shipmentDTO2);
-        shipmentDTO2.setId(2L);
-        assertThat(shipmentDTO1).isNotEqualTo(shipmentDTO2);
-        shipmentDTO1.setId(null);
-        assertThat(shipmentDTO1).isNotEqualTo(shipmentDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(shipmentMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(shipmentMapper.fromId(null)).isNull();
     }
 }

@@ -26,7 +26,7 @@
     "clientFramework": "angularX",
     "useSass": true,
     "clientPackageManager": "npm",
-    "jhipsterVersion": "6.2.0",
+    "jhipsterVersion": "6.10.5",
     "skipUserManagement": false,
     "clientTheme": "none",
     "clientThemeVariant": "",
@@ -35,7 +35,9 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "blueprints": []
+    "blueprints": [],
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1608489223171
   },
   "entities": ["Product", "Address", "ShoppingOrder", "ProductOrder", "Shipment"]
 }

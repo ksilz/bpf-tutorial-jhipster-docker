@@ -13,6 +13,7 @@
     "indicator": {
       "diskSpace": "Festplattenspeicher",
       "mail": "Email",
+      "ping": "Application",
       "db": "Datenbank"
     },
     "table": {

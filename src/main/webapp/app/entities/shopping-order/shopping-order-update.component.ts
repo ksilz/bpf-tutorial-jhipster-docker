@@ -1,27 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import * as moment from 'moment';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { IShoppingOrder, ShoppingOrder } from 'app/shared/model/shopping-order.model';
 import { ShoppingOrderService } from './shopping-order.service';
-import { IUser, UserService } from 'app/core';
-import { IShipment } from 'app/shared/model/shipment.model';
-import { ShipmentService } from 'app/entities/shipment';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'bpf-shopping-order-update',
-  templateUrl: './shopping-order-update.component.html'
+  templateUrl: './shopping-order-update.component.html',
 })
 export class ShoppingOrderUpdateComponent implements OnInit {
-  isSaving: boolean;
-
-  users: IUser[];
-
-  shipments: IShipment[];
+  isSaving = false;
+  users: IUser[] = [];
   orderedDp: any;
 
   editForm = this.fb.group({
@@ -29,54 +24,39 @@ export class ShoppingOrderUpdateComponent implements OnInit {
     name: [null, [Validators.required, Validators.minLength(2), Validators.maxLength(90)]],
     totalAmount: [null, [Validators.min(0)]],
     ordered: [],
-    buyerId: [null, Validators.required]
+    buyerId: [null, Validators.required],
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected shoppingOrderService: ShoppingOrderService,
     protected userService: UserService,
-    protected shipmentService: ShipmentService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ shoppingOrder }) => {
       this.updateForm(shoppingOrder);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });
-    this.userService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IUser[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IUser[]>) => response.body)
-      )
-      .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.shipmentService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IShipment[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IShipment[]>) => response.body)
-      )
-      .subscribe((res: IShipment[]) => (this.shipments = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(shoppingOrder: IShoppingOrder) {
+  updateForm(shoppingOrder: IShoppingOrder): void {
     this.editForm.patchValue({
       id: shoppingOrder.id,
       name: shoppingOrder.name,
       totalAmount: shoppingOrder.totalAmount,
       ordered: shoppingOrder.ordered,
-      buyerId: shoppingOrder.buyerId
+      buyerId: shoppingOrder.buyerId,
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const shoppingOrder = this.createFromForm();
     if (shoppingOrder.id !== undefined) {
@@ -89,35 +69,31 @@ export class ShoppingOrderUpdateComponent implements OnInit {
   private createFromForm(): IShoppingOrder {
     return {
       ...new ShoppingOrder(),
-      id: this.editForm.get(['id']).value,
-      name: this.editForm.get(['name']).value,
-      totalAmount: this.editForm.get(['totalAmount']).value,
-      ordered: this.editForm.get(['ordered']).value,
-      buyerId: this.editForm.get(['buyerId']).value
+      id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      totalAmount: this.editForm.get(['totalAmount'])!.value,
+      ordered: this.editForm.get(['ordered'])!.value,
+      buyerId: this.editForm.get(['buyerId'])!.value,
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IShoppingOrder>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IShoppingOrder>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackUserById(index: number, item: IUser) {
-    return item.id;
-  }
-
-  trackShipmentById(index: number, item: IShipment) {
+  trackById(index: number, item: IUser): any {
     return item.id;
   }
 }

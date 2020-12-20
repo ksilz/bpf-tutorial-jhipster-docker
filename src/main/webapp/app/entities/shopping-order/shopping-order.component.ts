@@ -1,65 +1,53 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IShoppingOrder } from 'app/shared/model/shopping-order.model';
-import { AccountService } from 'app/core';
 import { ShoppingOrderService } from './shopping-order.service';
+import { ShoppingOrderDeleteDialogComponent } from './shopping-order-delete-dialog.component';
 
 @Component({
   selector: 'bpf-shopping-order',
-  templateUrl: './shopping-order.component.html'
+  templateUrl: './shopping-order.component.html',
 })
 export class ShoppingOrderComponent implements OnInit, OnDestroy {
-  shoppingOrders: IShoppingOrder[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  shoppingOrders?: IShoppingOrder[];
+  eventSubscriber?: Subscription;
 
   constructor(
     protected shoppingOrderService: ShoppingOrderService,
-    protected jhiAlertService: JhiAlertService,
     protected eventManager: JhiEventManager,
-    protected accountService: AccountService
+    protected modalService: NgbModal
   ) {}
 
-  loadAll() {
-    this.shoppingOrderService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IShoppingOrder[]>) => res.ok),
-        map((res: HttpResponse<IShoppingOrder[]>) => res.body)
-      )
-      .subscribe(
-        (res: IShoppingOrder[]) => {
-          this.shoppingOrders = res;
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+  loadAll(): void {
+    this.shoppingOrderService.query().subscribe((res: HttpResponse<IShoppingOrder[]>) => (this.shoppingOrders = res.body || []));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInShoppingOrders();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IShoppingOrder) {
-    return item.id;
+  trackId(index: number, item: IShoppingOrder): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInShoppingOrders() {
-    this.eventSubscriber = this.eventManager.subscribe('shoppingOrderListModification', response => this.loadAll());
+  registerChangeInShoppingOrders(): void {
+    this.eventSubscriber = this.eventManager.subscribe('shoppingOrderListModification', () => this.loadAll());
   }
 
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
+  delete(shoppingOrder: IShoppingOrder): void {
+    const modalRef = this.modalService.open(ShoppingOrderDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.shoppingOrder = shoppingOrder;
   }
 }

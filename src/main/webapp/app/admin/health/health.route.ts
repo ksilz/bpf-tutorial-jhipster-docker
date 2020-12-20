@@ -1,11 +1,11 @@
 import { Route } from '@angular/router';
 
-import { BpfHealthCheckComponent } from './health.component';
+import { HealthComponent } from './health.component';
 
 export const healthRoute: Route = {
-  path: 'bpf-health',
-  component: BpfHealthCheckComponent,
+  path: '',
+  component: HealthComponent,
   data: {
-    pageTitle: 'health.title'
-  }
+    pageTitle: 'health.title',
+  },
 };

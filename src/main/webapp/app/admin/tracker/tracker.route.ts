@@ -1,11 +1,11 @@
 import { Route } from '@angular/router';
 
-import { BpfTrackerComponent } from './tracker.component';
+import { TrackerComponent } from './tracker.component';
 
 export const trackerRoute: Route = {
-  path: 'bpf-tracker',
-  component: BpfTrackerComponent,
+  path: '',
+  component: TrackerComponent,
   data: {
-    pageTitle: 'tracker.title'
-  }
+    pageTitle: 'tracker.title',
+  },
 };

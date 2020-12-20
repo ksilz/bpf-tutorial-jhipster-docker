@@ -1,65 +1,49 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IShipment } from 'app/shared/model/shipment.model';
-import { AccountService } from 'app/core';
 import { ShipmentService } from './shipment.service';
+import { ShipmentDeleteDialogComponent } from './shipment-delete-dialog.component';
 
 @Component({
   selector: 'bpf-shipment',
-  templateUrl: './shipment.component.html'
+  templateUrl: './shipment.component.html',
 })
 export class ShipmentComponent implements OnInit, OnDestroy {
-  shipments: IShipment[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  shipments?: IShipment[];
+  eventSubscriber?: Subscription;
 
-  constructor(
-    protected shipmentService: ShipmentService,
-    protected jhiAlertService: JhiAlertService,
-    protected eventManager: JhiEventManager,
-    protected accountService: AccountService
-  ) {}
+  constructor(protected shipmentService: ShipmentService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
 
-  loadAll() {
-    this.shipmentService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IShipment[]>) => res.ok),
-        map((res: HttpResponse<IShipment[]>) => res.body)
-      )
-      .subscribe(
-        (res: IShipment[]) => {
-          this.shipments = res;
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+  loadAll(): void {
+    this.shipmentService.query().subscribe((res: HttpResponse<IShipment[]>) => (this.shipments = res.body || []));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInShipments();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IShipment) {
-    return item.id;
+  trackId(index: number, item: IShipment): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  registerChangeInShipments() {
-    this.eventSubscriber = this.eventManager.subscribe('shipmentListModification', response => this.loadAll());
+  registerChangeInShipments(): void {
+    this.eventSubscriber = this.eventManager.subscribe('shipmentListModification', () => this.loadAll());
   }
 
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
+  delete(shipment: IShipment): void {
+    const modalRef = this.modalService.open(ShipmentDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.shipment = shipment;
   }
 }

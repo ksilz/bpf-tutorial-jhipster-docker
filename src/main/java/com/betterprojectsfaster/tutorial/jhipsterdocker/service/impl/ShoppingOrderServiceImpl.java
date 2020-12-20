@@ -35,12 +35,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         this.shoppingOrderMapper = shoppingOrderMapper;
     }
 
-    /**
-     * Save a shoppingOrder.
-     *
-     * @param shoppingOrderDTO the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public ShoppingOrderDTO save(ShoppingOrderDTO shoppingOrderDTO) {
         log.debug("Request to save ShoppingOrder : {}", shoppingOrderDTO);
@@ -49,11 +43,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         return shoppingOrderMapper.toDto(shoppingOrder);
     }
 
-    /**
-     * Get all the shoppingOrders.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<ShoppingOrderDTO> findAll() {
@@ -66,7 +55,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 
     /**
-    *  Get all the shoppingOrders where Shipment is {@code null}.
+     *  Get all the shoppingOrders where Shipment is {@code null}.
      *  @return the list of entities.
      */
     @Transactional(readOnly = true) 
@@ -79,12 +68,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    /**
-     * Get one shoppingOrder by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<ShoppingOrderDTO> findOne(Long id) {
@@ -93,11 +76,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
             .map(shoppingOrderMapper::toDto);
     }
 
-    /**
-     * Delete the shoppingOrder by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete ShoppingOrder : {}", id);

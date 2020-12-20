@@ -1,4 +1,3 @@
-/* tslint:disable no-unused-expression */
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
@@ -10,8 +9,8 @@ const expect = chai.expect;
 describe('Product e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let productUpdatePage: ProductUpdatePage;
   let productComponentsPage: ProductComponentsPage;
+  let productUpdatePage: ProductUpdatePage;
   let productDeleteDialog: ProductDeleteDialog;
   const fileNameToUpload = 'logo-jhipster.png';
   const fileToUpload = '../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
@@ -30,6 +29,7 @@ describe('Product e2e test', () => {
     productComponentsPage = new ProductComponentsPage();
     await browser.wait(ec.visibilityOf(productComponentsPage.title), 5000);
     expect(await productComponentsPage.getTitle()).to.eq('mySimpleShopApp.product.home.title');
+    await browser.wait(ec.or(ec.visibilityOf(productComponentsPage.entities), ec.visibilityOf(productComponentsPage.noResult)), 1000);
   });
 
   it('should load create Product page', async () => {
@@ -43,6 +43,7 @@ describe('Product e2e test', () => {
     const nbButtonsBeforeCreate = await productComponentsPage.countDeleteButtons();
 
     await productComponentsPage.clickOnCreateButton();
+
     await promise.all([
       productUpdatePage.setNameInput('name'),
       productUpdatePage.setPriceInput('5'),
@@ -50,8 +51,9 @@ describe('Product e2e test', () => {
       productUpdatePage.setPictureInput(absolutePath),
       productUpdatePage.setSpecificationInput(absolutePath),
       productUpdatePage.categorySelectLastOption(),
-      productUpdatePage.setInventoryInput('5')
+      productUpdatePage.setInventoryInput('5'),
     ]);
+
     expect(await productUpdatePage.getNameInput()).to.eq('name', 'Expected Name value to be equals to name');
     expect(await productUpdatePage.getPriceInput()).to.eq('5', 'Expected price value to be equals to 5');
     expect(await productUpdatePage.getDescriptionInput()).to.eq('description', 'Expected Description value to be equals to description');
@@ -64,6 +66,7 @@ describe('Product e2e test', () => {
       'Expected Specification value to be end with ' + fileNameToUpload
     );
     expect(await productUpdatePage.getInventoryInput()).to.eq('5', 'Expected inventory value to be equals to 5');
+
     await productUpdatePage.save();
     expect(await productUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

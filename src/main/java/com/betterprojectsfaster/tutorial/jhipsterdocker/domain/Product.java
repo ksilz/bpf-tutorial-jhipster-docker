@@ -1,4 +1,5 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.domain;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
@@ -17,7 +18,7 @@ import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.enumeration.Produ
  */
 @Entity
 @Table(name = "product")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -68,10 +69,10 @@ public class Product implements Serializable {
     private Integer inventory;
 
     @OneToMany(mappedBy = "product")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<ProductOrder> productOrders = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -221,7 +222,7 @@ public class Product implements Serializable {
     public void setProductOrders(Set<ProductOrder> productOrders) {
         this.productOrders = productOrders;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -239,6 +240,7 @@ public class Product implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Product{" +

@@ -1,17 +1,20 @@
-/* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { AddressComponentsPage, AddressDeleteDialog, AddressUpdatePage } from './address.page-object';
+import {
+  AddressComponentsPage,
+  /* AddressDeleteDialog, */
+  AddressUpdatePage,
+} from './address.page-object';
 
 const expect = chai.expect;
 
 describe('Address e2e test', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  let addressUpdatePage: AddressUpdatePage;
   let addressComponentsPage: AddressComponentsPage;
-  /*let addressDeleteDialog: AddressDeleteDialog;*/
+  let addressUpdatePage: AddressUpdatePage;
+  /* let addressDeleteDialog: AddressDeleteDialog; */
 
   before(async () => {
     await browser.get('/');
@@ -26,6 +29,7 @@ describe('Address e2e test', () => {
     addressComponentsPage = new AddressComponentsPage();
     await browser.wait(ec.visibilityOf(addressComponentsPage.title), 5000);
     expect(await addressComponentsPage.getTitle()).to.eq('mySimpleShopApp.address.home.title');
+    await browser.wait(ec.or(ec.visibilityOf(addressComponentsPage.entities), ec.visibilityOf(addressComponentsPage.noResult)), 1000);
   });
 
   it('should load create Address page', async () => {
@@ -39,6 +43,7 @@ describe('Address e2e test', () => {
         const nbButtonsBeforeCreate = await addressComponentsPage.countDeleteButtons();
 
         await addressComponentsPage.clickOnCreateButton();
+
         await promise.all([
             addressUpdatePage.setAddressLine1Input('addressLine1'),
             addressUpdatePage.setAddressLine2Input('addressLine2'),
@@ -46,15 +51,17 @@ describe('Address e2e test', () => {
             addressUpdatePage.setPostalCodeInput('postalCode'),
             addressUpdatePage.userSelectLastOption(),
         ]);
+
         expect(await addressUpdatePage.getAddressLine1Input()).to.eq('addressLine1', 'Expected AddressLine1 value to be equals to addressLine1');
         expect(await addressUpdatePage.getAddressLine2Input()).to.eq('addressLine2', 'Expected AddressLine2 value to be equals to addressLine2');
         expect(await addressUpdatePage.getCityInput()).to.eq('city', 'Expected City value to be equals to city');
         expect(await addressUpdatePage.getPostalCodeInput()).to.eq('postalCode', 'Expected PostalCode value to be equals to postalCode');
+
         await addressUpdatePage.save();
         expect(await addressUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
         expect(await addressComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    });*/
+    }); */
 
   /* it('should delete last Address', async () => {
         const nbButtonsBeforeDelete = await addressComponentsPage.countDeleteButtons();
@@ -66,7 +73,7 @@ describe('Address e2e test', () => {
         await addressDeleteDialog.clickOnConfirmButton();
 
         expect(await addressComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    });*/
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

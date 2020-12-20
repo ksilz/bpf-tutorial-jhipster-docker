@@ -1,4 +1,5 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
@@ -17,7 +18,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "shopping_order")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ShoppingOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,19 +41,19 @@ public class ShoppingOrder implements Serializable {
     private LocalDate ordered;
 
     @OneToMany(mappedBy = "overallOrder")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<ProductOrder> orders = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("shoppingOrders")
+    @JsonIgnoreProperties(value = "shoppingOrders", allowSetters = true)
     private User buyer;
 
     @OneToOne(mappedBy = "order")
     @JsonIgnore
     private Shipment shipment;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -150,7 +151,7 @@ public class ShoppingOrder implements Serializable {
     public void setShipment(Shipment shipment) {
         this.shipment = shipment;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -168,6 +169,7 @@ public class ShoppingOrder implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "ShoppingOrder{" +

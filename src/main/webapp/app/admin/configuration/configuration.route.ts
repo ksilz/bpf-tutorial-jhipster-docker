@@ -1,11 +1,11 @@
 import { Route } from '@angular/router';
 
-import { BpfConfigurationComponent } from './configuration.component';
+import { ConfigurationComponent } from './configuration.component';
 
 export const configurationRoute: Route = {
-  path: 'bpf-configuration',
-  component: BpfConfigurationComponent,
+  path: '',
+  component: ConfigurationComponent,
   data: {
-    pageTitle: 'configuration.title'
-  }
+    pageTitle: 'configuration.title',
+  },
 };

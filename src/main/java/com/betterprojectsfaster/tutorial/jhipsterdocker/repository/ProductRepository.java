@@ -1,9 +1,9 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.repository;
 
 import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Product;
+
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-
 
 /**
  * Spring Data  repository for the Product entity.
@@ -11,5 +11,4 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-
 }

@@ -1,13 +1,13 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.ProductOrder} entity.
  */
 public class ProductOrderDTO implements Serializable {
-
+    
     private Long id;
 
     @NotNull
@@ -27,7 +27,7 @@ public class ProductOrderDTO implements Serializable {
     private Long overallOrderId;
 
     private String overallOrderName;
-
+    
     public Long getId() {
         return id;
     }
@@ -97,33 +97,30 @@ public class ProductOrderDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof ProductOrderDTO)) {
             return false;
         }
 
-        ProductOrderDTO productOrderDTO = (ProductOrderDTO) o;
-        if (productOrderDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), productOrderDTO.getId());
+        return id != null && id.equals(((ProductOrderDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "ProductOrderDTO{" +
             "id=" + getId() +
             ", amount=" + getAmount() +
-            ", buyer=" + getBuyerId() +
-            ", buyer='" + getBuyerLogin() + "'" +
-            ", product=" + getProductId() +
-            ", product='" + getProductName() + "'" +
-            ", overallOrder=" + getOverallOrderId() +
-            ", overallOrder='" + getOverallOrderName() + "'" +
+            ", buyerId=" + getBuyerId() +
+            ", buyerLogin='" + getBuyerLogin() + "'" +
+            ", productId=" + getProductId() +
+            ", productName='" + getProductName() + "'" +
+            ", overallOrderId=" + getOverallOrderId() +
+            ", overallOrderName='" + getOverallOrderName() + "'" +
             "}";
     }
 }

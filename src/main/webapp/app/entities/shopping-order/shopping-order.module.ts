@@ -1,45 +1,16 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core';
 
-import { MySimpleShopSharedModule } from 'app/shared';
-import {
-  ShoppingOrderComponent,
-  ShoppingOrderDetailComponent,
-  ShoppingOrderUpdateComponent,
-  ShoppingOrderDeletePopupComponent,
-  ShoppingOrderDeleteDialogComponent,
-  shoppingOrderRoute,
-  shoppingOrderPopupRoute
-} from './';
-
-const ENTITY_STATES = [...shoppingOrderRoute, ...shoppingOrderPopupRoute];
+import { MySimpleShopSharedModule } from 'app/shared/shared.module';
+import { ShoppingOrderComponent } from './shopping-order.component';
+import { ShoppingOrderDetailComponent } from './shopping-order-detail.component';
+import { ShoppingOrderUpdateComponent } from './shopping-order-update.component';
+import { ShoppingOrderDeleteDialogComponent } from './shopping-order-delete-dialog.component';
+import { shoppingOrderRoute } from './shopping-order.route';
 
 @NgModule({
-  imports: [MySimpleShopSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    ShoppingOrderComponent,
-    ShoppingOrderDetailComponent,
-    ShoppingOrderUpdateComponent,
-    ShoppingOrderDeleteDialogComponent,
-    ShoppingOrderDeletePopupComponent
-  ],
-  entryComponents: [
-    ShoppingOrderComponent,
-    ShoppingOrderUpdateComponent,
-    ShoppingOrderDeleteDialogComponent,
-    ShoppingOrderDeletePopupComponent
-  ],
-  providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [MySimpleShopSharedModule, RouterModule.forChild(shoppingOrderRoute)],
+  declarations: [ShoppingOrderComponent, ShoppingOrderDetailComponent, ShoppingOrderUpdateComponent, ShoppingOrderDeleteDialogComponent],
+  entryComponents: [ShoppingOrderDeleteDialogComponent],
 })
-export class MySimpleShopShoppingOrderModule {
-  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-    this.languageHelper.language.subscribe((languageKey: string) => {
-      if (languageKey) {
-        this.languageService.changeLanguage(languageKey);
-      }
-    });
-  }
-}
+export class MySimpleShopShoppingOrderModule {}

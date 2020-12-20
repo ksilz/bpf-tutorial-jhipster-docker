@@ -5,20 +5,18 @@ import { IShipment } from 'app/shared/model/shipment.model';
 
 @Component({
   selector: 'bpf-shipment-detail',
-  templateUrl: './shipment-detail.component.html'
+  templateUrl: './shipment-detail.component.html',
 })
 export class ShipmentDetailComponent implements OnInit {
-  shipment: IShipment;
+  shipment: IShipment | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ shipment }) => {
-      this.shipment = shipment;
-    });
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ shipment }) => (this.shipment = shipment));
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

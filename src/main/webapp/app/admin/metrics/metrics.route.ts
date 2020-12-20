@@ -1,11 +1,11 @@
 import { Route } from '@angular/router';
 
-import { BpfMetricsMonitoringComponent } from './metrics.component';
+import { MetricsComponent } from './metrics.component';
 
 export const metricsRoute: Route = {
-  path: 'bpf-metrics',
-  component: BpfMetricsMonitoringComponent,
+  path: '',
+  component: MetricsComponent,
   data: {
-    pageTitle: 'metrics.title'
-  }
+    pageTitle: 'metrics.title',
+  },
 };

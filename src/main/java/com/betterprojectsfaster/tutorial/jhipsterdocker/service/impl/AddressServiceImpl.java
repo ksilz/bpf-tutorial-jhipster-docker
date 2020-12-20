@@ -34,12 +34,6 @@ public class AddressServiceImpl implements AddressService {
         this.addressMapper = addressMapper;
     }
 
-    /**
-     * Save a address.
-     *
-     * @param addressDTO the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public AddressDTO save(AddressDTO addressDTO) {
         log.debug("Request to save Address : {}", addressDTO);
@@ -48,11 +42,6 @@ public class AddressServiceImpl implements AddressService {
         return addressMapper.toDto(address);
     }
 
-    /**
-     * Get all the addresses.
-     *
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public List<AddressDTO> findAll() {
@@ -63,12 +52,6 @@ public class AddressServiceImpl implements AddressService {
     }
 
 
-    /**
-     * Get one address by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<AddressDTO> findOne(Long id) {
@@ -77,11 +60,6 @@ public class AddressServiceImpl implements AddressService {
             .map(addressMapper::toDto);
     }
 
-    /**
-     * Delete the address by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Address : {}", id);
