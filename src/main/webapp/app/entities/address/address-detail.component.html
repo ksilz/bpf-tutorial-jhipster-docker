@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="address">
+            <h2><span jhiTranslate="mySimpleShopApp.address.detail.title">Address</span> {{address.id}}</h2>
+            <hr>
+            <bpf-alert-error></bpf-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="mySimpleShopApp.address.addressLine1">Address Line 1</span></dt>
+                <dd>
+                    <span>{{address.addressLine1}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.address.addressLine2">Address Line 2</span></dt>
+                <dd>
+                    <span>{{address.addressLine2}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.address.city">City</span></dt>
+                <dd>
+                    <span>{{address.city}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.address.postalCode">Postal Code</span></dt>
+                <dd>
+                    <span>{{address.postalCode}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.address.user">User</span></dt>
+                <dd>
+                    {{address.userLogin}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/address', address.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

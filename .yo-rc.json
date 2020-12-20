@@ -1,0 +1,52 @@
+{
+  "generator-jhipster": {
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": false,
+    "enableTranslation": true,
+    "jhiPrefix": "bpf",
+    "languages": [
+      "en",
+      "de"
+    ],
+    "messageBroker": false,
+    "nativeLanguage": "en",
+    "packageName": "com.betterprojectsfaster.tutorial.jhipsterdocker",
+    "packageFolder": "com/betterprojectsfaster/tutorial/jhipsterdocker",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "serviceDiscoveryType": false,
+    "skipClient": false,
+    "skipServer": false,
+    "testFrameworks": [
+      "protractor"
+    ],
+    "websocket": "spring-websocket",
+    "baseName": "my_simple_shop",
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angularX",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "jhipsterVersion": "6.2.0",
+    "skipUserManagement": false,
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "serverPort": "8080",
+    "jwtSecretKey": "ZjVkNThmYTUwYmFkMzRlNTU4MjI0NmM1MmRlOWUwYTgzOTc3NGZjZmU0MGQ1NGYyY2Y0NzRkZDYyZjcyNWQ5MjhjMTJiNDI0ZGMzOTRhMjYwMzE1MzkwMzkyZmQwMDA5MDNiYzUzZjBlODY5MzgwZWYwZWI4YjEyNjc1MTg3MTc=",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "blueprints": []
+  },
+  "entities": [
+    "Product",
+    "Address",
+    "ShoppingOrder",
+    "ProductOrder",
+    "Shipment"
+  ]
+}

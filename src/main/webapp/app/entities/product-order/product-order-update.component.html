@@ -1,0 +1,86 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="bpf-product-order-heading" jhiTranslate="mySimpleShopApp.productOrder.home.createOrEditLabel">Create or edit a Product Order</h2>
+            <div>
+                <bpf-alert-error></bpf-alert-error>
+                <div class="form-group" [hidden]="!editForm.get('id').value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id"
+                        readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.productOrder.amount" for="field_amount">Amount</label>
+                    <input type="number" class="form-control" name="amount" id="field_amount"
+                           formControlName="amount"/>
+                    <div *ngIf="editForm.get('amount').invalid && (editForm.get('amount').dirty || editForm.get('amount').touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('amount').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('amount').errors.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: 0 }">
+                            This field should be at least 0.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('amount').errors.max" jhiTranslate="entity.validation.max" [translateValues]="{ max: 5 }">
+                            This field cannot be more than 5.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('amount')?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.productOrder.buyer" for="field_buyer">Buyer</label>
+                    <select class="form-control" id="field_buyer" name="buyer" formControlName="buyerId">
+                        <option *ngIf="!editForm.get('buyerId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="userOption.id" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('buyerId').invalid && (editForm.get('buyerId').dirty || editForm.get('buyerId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('buyerId').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.productOrder.product" for="field_product">Product</label>
+                    <select class="form-control" id="field_product" name="product" formControlName="productId">
+                        <option *ngIf="!editForm.get('productId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="productOption.id" *ngFor="let productOption of products; trackBy: trackProductById">{{productOption.name}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('productId').invalid && (editForm.get('productId').dirty || editForm.get('productId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('productId').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="mySimpleShopApp.productOrder.overallOrder" for="field_overallOrder">Overall Order</label>
+                    <select class="form-control" id="field_overallOrder" name="overallOrder" formControlName="overallOrderId">
+                        <option *ngIf="!editForm.get('overallOrderId').value" [ngValue]="null" selected></option>
+                        <option [ngValue]="shoppingOrderOption.id" *ngFor="let shoppingOrderOption of shoppingorders; trackBy: trackShoppingOrderById">{{shoppingOrderOption.name}}</option>
+                    </select>
+                </div>
+                <div *ngIf="editForm.get('overallOrderId').invalid && (editForm.get('overallOrderId').dirty || editForm.get('overallOrderId').touched)">
+                    <small class="form-text text-danger"
+                           *ngIf="editForm.get('overallOrderId').errors.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

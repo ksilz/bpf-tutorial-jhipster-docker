@@ -1,0 +1,43 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="productOrder">
+            <h2><span jhiTranslate="mySimpleShopApp.productOrder.detail.title">Product Order</span> {{productOrder.id}}</h2>
+            <hr>
+            <bpf-alert-error></bpf-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="mySimpleShopApp.productOrder.amount">Amount</span></dt>
+                <dd>
+                    <span>{{productOrder.amount}}</span>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.productOrder.buyer">Buyer</span></dt>
+                <dd>
+                    {{productOrder.buyerLogin}}
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.productOrder.product">Product</span></dt>
+                <dd>
+                    <div *ngIf="productOrder.productId">
+                        <a [routerLink]="['/product', productOrder.productId, 'view']">{{productOrder.productName}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="mySimpleShopApp.productOrder.overallOrder">Overall Order</span></dt>
+                <dd>
+                    <div *ngIf="productOrder.overallOrderId">
+                        <a [routerLink]="['/shopping-order', productOrder.overallOrderId, 'view']">{{productOrder.overallOrderName}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/product-order', productOrder.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
