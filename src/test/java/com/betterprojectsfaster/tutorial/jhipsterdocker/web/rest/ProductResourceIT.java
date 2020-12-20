@@ -6,26 +6,20 @@ import com.betterprojectsfaster.tutorial.jhipsterdocker.repository.ProductReposi
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.ProductService;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.ProductDTO;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.mapper.ProductMapper;
-import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -36,6 +30,8 @@ import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.enumeration.Produ
  * Integration tests for the {@link ProductResource} REST controller.
  */
 @SpringBootTest(classes = MySimpleShopApp.class)
+@AutoConfigureMockMvc
+@WithMockUser
 public class ProductResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -43,7 +39,6 @@ public class ProductResourceIT {
 
     private static final Float DEFAULT_PRICE = 0F;
     private static final Float UPDATED_PRICE = 1F;
-    private static final Float SMALLER_PRICE = 0F - 1F;
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -63,7 +58,6 @@ public class ProductResourceIT {
 
     private static final Integer DEFAULT_INVENTORY = 0;
     private static final Integer UPDATED_INVENTORY = 1;
-    private static final Integer SMALLER_INVENTORY = 0 - 1;
 
     @Autowired
     private ProductRepository productRepository;
@@ -75,35 +69,12 @@ public class ProductResourceIT {
     private ProductService productService;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restProductMockMvc;
 
     private Product product;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final ProductResource productResource = new ProductResource(productService);
-        this.restProductMockMvc = MockMvcBuilders.standaloneSetup(productResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -153,11 +124,10 @@ public class ProductResourceIT {
     @Transactional
     public void createProduct() throws Exception {
         int databaseSizeBeforeCreate = productRepository.findAll().size();
-
         // Create the Product
         ProductDTO productDTO = productMapper.toDto(product);
         restProductMockMvc.perform(post("/api/products")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productDTO)))
             .andExpect(status().isCreated());
 
@@ -187,7 +157,7 @@ public class ProductResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProductMockMvc.perform(post("/api/products")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productDTO)))
             .andExpect(status().isBadRequest());
 
@@ -207,8 +177,9 @@ public class ProductResourceIT {
         // Create the Product, which fails.
         ProductDTO productDTO = productMapper.toDto(product);
 
+
         restProductMockMvc.perform(post("/api/products")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productDTO)))
             .andExpect(status().isBadRequest());
 
@@ -226,8 +197,9 @@ public class ProductResourceIT {
         // Create the Product, which fails.
         ProductDTO productDTO = productMapper.toDto(product);
 
+
         restProductMockMvc.perform(post("/api/products")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productDTO)))
             .andExpect(status().isBadRequest());
 
@@ -245,8 +217,9 @@ public class ProductResourceIT {
         // Create the Product, which fails.
         ProductDTO productDTO = productMapper.toDto(product);
 
+
         restProductMockMvc.perform(post("/api/products")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productDTO)))
             .andExpect(status().isBadRequest());
 
@@ -263,9 +236,9 @@ public class ProductResourceIT {
         // Get all the productList
         restProductMockMvc.perform(get("/api/products?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].pictureContentType").value(hasItem(DEFAULT_PICTURE_CONTENT_TYPE)))
@@ -285,9 +258,9 @@ public class ProductResourceIT {
         // Get the product
         restProductMockMvc.perform(get("/api/products/{id}", product.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(product.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.pictureContentType").value(DEFAULT_PICTURE_CONTENT_TYPE))
@@ -297,7 +270,6 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY.toString()))
             .andExpect(jsonPath("$.inventory").value(DEFAULT_INVENTORY));
     }
-
     @Test
     @Transactional
     public void getNonExistingProduct() throws Exception {
@@ -331,7 +303,7 @@ public class ProductResourceIT {
         ProductDTO productDTO = productMapper.toDto(updatedProduct);
 
         restProductMockMvc.perform(put("/api/products")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productDTO)))
             .andExpect(status().isOk());
 
@@ -360,7 +332,7 @@ public class ProductResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProductMockMvc.perform(put("/api/products")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productDTO)))
             .andExpect(status().isBadRequest());
 
@@ -379,49 +351,11 @@ public class ProductResourceIT {
 
         // Delete the product
         restProductMockMvc.perform(delete("/api/products/{id}", product.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
         List<Product> productList = productRepository.findAll();
         assertThat(productList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Product.class);
-        Product product1 = new Product();
-        product1.setId(1L);
-        Product product2 = new Product();
-        product2.setId(product1.getId());
-        assertThat(product1).isEqualTo(product2);
-        product2.setId(2L);
-        assertThat(product1).isNotEqualTo(product2);
-        product1.setId(null);
-        assertThat(product1).isNotEqualTo(product2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProductDTO.class);
-        ProductDTO productDTO1 = new ProductDTO();
-        productDTO1.setId(1L);
-        ProductDTO productDTO2 = new ProductDTO();
-        assertThat(productDTO1).isNotEqualTo(productDTO2);
-        productDTO2.setId(productDTO1.getId());
-        assertThat(productDTO1).isEqualTo(productDTO2);
-        productDTO2.setId(2L);
-        assertThat(productDTO1).isNotEqualTo(productDTO2);
-        productDTO1.setId(null);
-        assertThat(productDTO1).isNotEqualTo(productDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(productMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(productMapper.fromId(null)).isNull();
     }
 }

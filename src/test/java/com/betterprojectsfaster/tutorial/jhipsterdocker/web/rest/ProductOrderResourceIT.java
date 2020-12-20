@@ -9,25 +9,19 @@ import com.betterprojectsfaster.tutorial.jhipsterdocker.repository.ProductOrderR
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.ProductOrderService;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.ProductOrderDTO;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.mapper.ProductOrderMapper;
-import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,11 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link ProductOrderResource} REST controller.
  */
 @SpringBootTest(classes = MySimpleShopApp.class)
+@AutoConfigureMockMvc
+@WithMockUser
 public class ProductOrderResourceIT {
 
     private static final Integer DEFAULT_AMOUNT = 0;
     private static final Integer UPDATED_AMOUNT = 1;
-    private static final Integer SMALLER_AMOUNT = 0 - 1;
 
     @Autowired
     private ProductOrderRepository productOrderRepository;
@@ -53,35 +48,12 @@ public class ProductOrderResourceIT {
     private ProductOrderService productOrderService;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restProductOrderMockMvc;
 
     private ProductOrder productOrder;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final ProductOrderResource productOrderResource = new ProductOrderResource(productOrderService);
-        this.restProductOrderMockMvc = MockMvcBuilders.standaloneSetup(productOrderResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -165,11 +137,10 @@ public class ProductOrderResourceIT {
     @Transactional
     public void createProductOrder() throws Exception {
         int databaseSizeBeforeCreate = productOrderRepository.findAll().size();
-
         // Create the ProductOrder
         ProductOrderDTO productOrderDTO = productOrderMapper.toDto(productOrder);
         restProductOrderMockMvc.perform(post("/api/product-orders")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productOrderDTO)))
             .andExpect(status().isCreated());
 
@@ -191,7 +162,7 @@ public class ProductOrderResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restProductOrderMockMvc.perform(post("/api/product-orders")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productOrderDTO)))
             .andExpect(status().isBadRequest());
 
@@ -211,8 +182,9 @@ public class ProductOrderResourceIT {
         // Create the ProductOrder, which fails.
         ProductOrderDTO productOrderDTO = productOrderMapper.toDto(productOrder);
 
+
         restProductOrderMockMvc.perform(post("/api/product-orders")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productOrderDTO)))
             .andExpect(status().isBadRequest());
 
@@ -229,7 +201,7 @@ public class ProductOrderResourceIT {
         // Get all the productOrderList
         restProductOrderMockMvc.perform(get("/api/product-orders?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(productOrder.getId().intValue())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT)));
     }
@@ -243,11 +215,10 @@ public class ProductOrderResourceIT {
         // Get the productOrder
         restProductOrderMockMvc.perform(get("/api/product-orders/{id}", productOrder.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(productOrder.getId().intValue()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT));
     }
-
     @Test
     @Transactional
     public void getNonExistingProductOrder() throws Exception {
@@ -273,7 +244,7 @@ public class ProductOrderResourceIT {
         ProductOrderDTO productOrderDTO = productOrderMapper.toDto(updatedProductOrder);
 
         restProductOrderMockMvc.perform(put("/api/product-orders")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productOrderDTO)))
             .andExpect(status().isOk());
 
@@ -294,7 +265,7 @@ public class ProductOrderResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProductOrderMockMvc.perform(put("/api/product-orders")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(productOrderDTO)))
             .andExpect(status().isBadRequest());
 
@@ -313,49 +284,11 @@ public class ProductOrderResourceIT {
 
         // Delete the productOrder
         restProductOrderMockMvc.perform(delete("/api/product-orders/{id}", productOrder.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
         List<ProductOrder> productOrderList = productOrderRepository.findAll();
         assertThat(productOrderList).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProductOrder.class);
-        ProductOrder productOrder1 = new ProductOrder();
-        productOrder1.setId(1L);
-        ProductOrder productOrder2 = new ProductOrder();
-        productOrder2.setId(productOrder1.getId());
-        assertThat(productOrder1).isEqualTo(productOrder2);
-        productOrder2.setId(2L);
-        assertThat(productOrder1).isNotEqualTo(productOrder2);
-        productOrder1.setId(null);
-        assertThat(productOrder1).isNotEqualTo(productOrder2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ProductOrderDTO.class);
-        ProductOrderDTO productOrderDTO1 = new ProductOrderDTO();
-        productOrderDTO1.setId(1L);
-        ProductOrderDTO productOrderDTO2 = new ProductOrderDTO();
-        assertThat(productOrderDTO1).isNotEqualTo(productOrderDTO2);
-        productOrderDTO2.setId(productOrderDTO1.getId());
-        assertThat(productOrderDTO1).isEqualTo(productOrderDTO2);
-        productOrderDTO2.setId(2L);
-        assertThat(productOrderDTO1).isNotEqualTo(productOrderDTO2);
-        productOrderDTO1.setId(null);
-        assertThat(productOrderDTO1).isNotEqualTo(productOrderDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(productOrderMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(productOrderMapper.fromId(null)).isNull();
     }
 }

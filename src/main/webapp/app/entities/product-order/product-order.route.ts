@@ -1,27 +1,33 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { UserRouteAccessService } from 'app/core';
-import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { ProductOrder } from 'app/shared/model/product-order.model';
+import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
+import { Observable, of, EMPTY } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
+import { Authority } from 'app/shared/constants/authority.constants';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
+import { IProductOrder, ProductOrder } from 'app/shared/model/product-order.model';
 import { ProductOrderService } from './product-order.service';
 import { ProductOrderComponent } from './product-order.component';
 import { ProductOrderDetailComponent } from './product-order-detail.component';
 import { ProductOrderUpdateComponent } from './product-order-update.component';
-import { ProductOrderDeletePopupComponent } from './product-order-delete-dialog.component';
-import { IProductOrder } from 'app/shared/model/product-order.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProductOrderResolve implements Resolve<IProductOrder> {
-  constructor(private service: ProductOrderService) {}
+  constructor(private service: ProductOrderService, private router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IProductOrder> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IProductOrder> | Observable<never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        filter((response: HttpResponse<ProductOrder>) => response.ok),
-        map((productOrder: HttpResponse<ProductOrder>) => productOrder.body)
+        flatMap((productOrder: HttpResponse<ProductOrder>) => {
+          if (productOrder.body) {
+            return of(productOrder.body);
+          } else {
+            this.router.navigate(['404']);
+            return EMPTY;
+          }
+        })
       );
     }
     return of(new ProductOrder());
@@ -33,61 +39,45 @@ export const productOrderRoute: Routes = [
     path: '',
     component: ProductOrderComponent,
     data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'mySimpleShopApp.productOrder.home.title'
+      authorities: [Authority.USER],
+      pageTitle: 'mySimpleShopApp.productOrder.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/view',
     component: ProductOrderDetailComponent,
     resolve: {
-      productOrder: ProductOrderResolve
+      productOrder: ProductOrderResolve,
     },
     data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'mySimpleShopApp.productOrder.home.title'
+      authorities: [Authority.USER],
+      pageTitle: 'mySimpleShopApp.productOrder.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: 'new',
     component: ProductOrderUpdateComponent,
     resolve: {
-      productOrder: ProductOrderResolve
+      productOrder: ProductOrderResolve,
     },
     data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'mySimpleShopApp.productOrder.home.title'
+      authorities: [Authority.USER],
+      pageTitle: 'mySimpleShopApp.productOrder.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/edit',
     component: ProductOrderUpdateComponent,
     resolve: {
-      productOrder: ProductOrderResolve
+      productOrder: ProductOrderResolve,
     },
     data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'mySimpleShopApp.productOrder.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  }
-];
-
-export const productOrderPopupRoute: Routes = [
-  {
-    path: ':id/delete',
-    component: ProductOrderDeletePopupComponent,
-    resolve: {
-      productOrder: ProductOrderResolve
-    },
-    data: {
-      authorities: ['ROLE_USER'],
-      pageTitle: 'mySimpleShopApp.productOrder.home.title'
+      authorities: [Authority.USER],
+      pageTitle: 'mySimpleShopApp.productOrder.home.title',
     },
     canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  }
+  },
 ];

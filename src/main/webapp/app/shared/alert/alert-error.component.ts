@@ -1,30 +1,33 @@
 import { Component, OnDestroy } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
-import { JhiEventManager, JhiAlert, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlert, JhiAlertService, JhiEventWithContent } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
+
+import { AlertError } from './alert-error.model';
 
 @Component({
   selector: 'bpf-alert-error',
-  template: `
-    <div class="alerts" role="alert">
-      <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
-        <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="alert.close(alerts)">
-          <pre [innerHTML]="alert.msg"></pre>
-        </ngb-alert>
-      </div>
+  template: ` <div class="alerts" role="alert">
+    <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
+      <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="close(alert)">
+        <pre [innerHTML]="alert.msg"></pre>
+      </ngb-alert>
     </div>
-  `
+  </div>`,
 })
-export class BpfAlertErrorComponent implements OnDestroy {
-  alerts: any[];
-  cleanHttpErrorListener: Subscription;
-  /* tslint:disable */
-  constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager, private translateService: TranslateService) {
-    /* tslint:enable */
-    this.alerts = [];
+export class AlertErrorComponent implements OnDestroy {
+  alerts: JhiAlert[] = [];
+  errorListener: Subscription;
+  httpErrorListener: Subscription;
 
-    this.cleanHttpErrorListener = eventManager.subscribe('mySimpleShopApp.httpError', response => {
-      let i;
+  constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager, translateService: TranslateService) {
+    this.errorListener = eventManager.subscribe('mySimpleShopApp.error', (response: JhiEventWithContent<AlertError>) => {
+      const errorResponse = response.content;
+      this.addErrorAlert(errorResponse.message, errorResponse.key, errorResponse.params);
+    });
+
+    this.httpErrorListener = eventManager.subscribe('mySimpleShopApp.httpError', (response: JhiEventWithContent<HttpErrorResponse>) => {
       const httpErrorResponse = response.content;
       switch (httpErrorResponse.status) {
         // connection refused, server not reachable
@@ -32,7 +35,7 @@ export class BpfAlertErrorComponent implements OnDestroy {
           this.addErrorAlert('Server not reachable', 'error.server.not.reachable');
           break;
 
-        case 400:
+        case 400: {
           const arr = httpErrorResponse.headers.keys();
           let errorHeader = null;
           let entityKey = null;
@@ -48,8 +51,7 @@ export class BpfAlertErrorComponent implements OnDestroy {
             this.addErrorAlert(errorHeader, errorHeader, { entityName });
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
             const fieldErrors = httpErrorResponse.error.fieldErrors;
-            for (i = 0; i < fieldErrors.length; i++) {
-              const fieldError = fieldErrors[i];
+            for (const fieldError of fieldErrors) {
               if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
                 fieldError.message = 'Size';
               }
@@ -64,6 +66,7 @@ export class BpfAlertErrorComponent implements OnDestroy {
             this.addErrorAlert(httpErrorResponse.error);
           }
           break;
+        }
 
         case 404:
           this.addErrorAlert('Not found', 'error.url.not.found');
@@ -79,21 +82,24 @@ export class BpfAlertErrorComponent implements OnDestroy {
     });
   }
 
-  setClasses(alert) {
-    return {
-      'jhi-toast': alert.toast,
-      [alert.position]: true
-    };
+  setClasses(alert: JhiAlert): { [key: string]: boolean } {
+    const classes = { 'jhi-toast': Boolean(alert.toast) };
+    if (alert.position) {
+      return { ...classes, [alert.position]: true };
+    }
+    return classes;
   }
 
-  ngOnDestroy() {
-    if (this.cleanHttpErrorListener !== undefined && this.cleanHttpErrorListener !== null) {
-      this.eventManager.destroy(this.cleanHttpErrorListener);
-      this.alerts = [];
+  ngOnDestroy(): void {
+    if (this.errorListener) {
+      this.eventManager.destroy(this.errorListener);
+    }
+    if (this.httpErrorListener) {
+      this.eventManager.destroy(this.httpErrorListener);
     }
   }
 
-  addErrorAlert(message, key?, data?) {
+  addErrorAlert(message: string, key?: string, data?: any): void {
     message = key && key !== null ? key : message;
 
     const newAlert: JhiAlert = {
@@ -102,9 +108,14 @@ export class BpfAlertErrorComponent implements OnDestroy {
       params: data,
       timeout: 5000,
       toast: this.alertService.isToast(),
-      scoped: true
+      scoped: true,
     };
 
     this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+  }
+
+  close(alert: JhiAlert): void {
+    // NOSONAR can be removed after https://github.com/SonarSource/SonarJS/issues/1930 is resolved
+    alert.close?.(this.alerts); // NOSONAR
   }
 }

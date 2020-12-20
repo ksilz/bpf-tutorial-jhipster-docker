@@ -1,18 +1,16 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { MySimpleShopSharedModule } from 'app/shared';
+import { MySimpleShopSharedModule } from 'app/shared/shared.module';
 
-import {
-  PasswordStrengthBarComponent,
-  RegisterComponent,
-  ActivateComponent,
-  PasswordComponent,
-  PasswordResetInitComponent,
-  PasswordResetFinishComponent,
-  SettingsComponent,
-  accountState
-} from './';
+import { PasswordStrengthBarComponent } from './password/password-strength-bar.component';
+import { RegisterComponent } from './register/register.component';
+import { ActivateComponent } from './activate/activate.component';
+import { PasswordComponent } from './password/password.component';
+import { PasswordResetInitComponent } from './password-reset/init/password-reset-init.component';
+import { PasswordResetFinishComponent } from './password-reset/finish/password-reset-finish.component';
+import { SettingsComponent } from './settings/settings.component';
+import { accountState } from './account.route';
 
 @NgModule({
   imports: [MySimpleShopSharedModule, RouterModule.forChild(accountState)],
@@ -23,8 +21,7 @@ import {
     PasswordStrengthBarComponent,
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
-    SettingsComponent
+    SettingsComponent,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class MySimpleShopAccountModule {}
+export class AccountModule {}

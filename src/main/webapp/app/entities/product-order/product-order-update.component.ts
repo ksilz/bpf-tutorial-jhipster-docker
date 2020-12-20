@@ -1,41 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiAlertService } from 'ng-jhipster';
+
 import { IProductOrder, ProductOrder } from 'app/shared/model/product-order.model';
 import { ProductOrderService } from './product-order.service';
-import { IUser, UserService } from 'app/core';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 import { IProduct } from 'app/shared/model/product.model';
-import { ProductService } from 'app/entities/product';
+import { ProductService } from 'app/entities/product/product.service';
 import { IShoppingOrder } from 'app/shared/model/shopping-order.model';
-import { ShoppingOrderService } from 'app/entities/shopping-order';
+import { ShoppingOrderService } from 'app/entities/shopping-order/shopping-order.service';
+
+type SelectableEntity = IUser | IProduct | IShoppingOrder;
 
 @Component({
   selector: 'bpf-product-order-update',
-  templateUrl: './product-order-update.component.html'
+  templateUrl: './product-order-update.component.html',
 })
 export class ProductOrderUpdateComponent implements OnInit {
-  isSaving: boolean;
-
-  users: IUser[];
-
-  products: IProduct[];
-
-  shoppingorders: IShoppingOrder[];
+  isSaving = false;
+  users: IUser[] = [];
+  products: IProduct[] = [];
+  shoppingorders: IShoppingOrder[] = [];
 
   editForm = this.fb.group({
     id: [],
     amount: [null, [Validators.required, Validators.min(0), Validators.max(5)]],
     buyerId: [null, Validators.required],
     productId: [null, Validators.required],
-    overallOrderId: [null, Validators.required]
+    overallOrderId: [null, Validators.required],
   });
 
   constructor(
-    protected jhiAlertService: JhiAlertService,
     protected productOrderService: ProductOrderService,
     protected userService: UserService,
     protected productService: ProductService,
@@ -44,49 +43,33 @@ export class ProductOrderUpdateComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit() {
-    this.isSaving = false;
+  ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ productOrder }) => {
       this.updateForm(productOrder);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
+
+      this.productService.query().subscribe((res: HttpResponse<IProduct[]>) => (this.products = res.body || []));
+
+      this.shoppingOrderService.query().subscribe((res: HttpResponse<IShoppingOrder[]>) => (this.shoppingorders = res.body || []));
     });
-    this.userService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IUser[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IUser[]>) => response.body)
-      )
-      .subscribe((res: IUser[]) => (this.users = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.productService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IProduct[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IProduct[]>) => response.body)
-      )
-      .subscribe((res: IProduct[]) => (this.products = res), (res: HttpErrorResponse) => this.onError(res.message));
-    this.shoppingOrderService
-      .query()
-      .pipe(
-        filter((mayBeOk: HttpResponse<IShoppingOrder[]>) => mayBeOk.ok),
-        map((response: HttpResponse<IShoppingOrder[]>) => response.body)
-      )
-      .subscribe((res: IShoppingOrder[]) => (this.shoppingorders = res), (res: HttpErrorResponse) => this.onError(res.message));
   }
 
-  updateForm(productOrder: IProductOrder) {
+  updateForm(productOrder: IProductOrder): void {
     this.editForm.patchValue({
       id: productOrder.id,
       amount: productOrder.amount,
       buyerId: productOrder.buyerId,
       productId: productOrder.productId,
-      overallOrderId: productOrder.overallOrderId
+      overallOrderId: productOrder.overallOrderId,
     });
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 
-  save() {
+  save(): void {
     this.isSaving = true;
     const productOrder = this.createFromForm();
     if (productOrder.id !== undefined) {
@@ -99,39 +82,31 @@ export class ProductOrderUpdateComponent implements OnInit {
   private createFromForm(): IProductOrder {
     return {
       ...new ProductOrder(),
-      id: this.editForm.get(['id']).value,
-      amount: this.editForm.get(['amount']).value,
-      buyerId: this.editForm.get(['buyerId']).value,
-      productId: this.editForm.get(['productId']).value,
-      overallOrderId: this.editForm.get(['overallOrderId']).value
+      id: this.editForm.get(['id'])!.value,
+      amount: this.editForm.get(['amount'])!.value,
+      buyerId: this.editForm.get(['buyerId'])!.value,
+      productId: this.editForm.get(['productId'])!.value,
+      overallOrderId: this.editForm.get(['overallOrderId'])!.value,
     };
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IProductOrder>>) {
-    result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IProductOrder>>): void {
+    result.subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
   }
 
-  protected onSaveSuccess() {
+  protected onSaveSuccess(): void {
     this.isSaving = false;
     this.previousState();
   }
 
-  protected onSaveError() {
+  protected onSaveError(): void {
     this.isSaving = false;
   }
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
-  }
 
-  trackUserById(index: number, item: IUser) {
-    return item.id;
-  }
-
-  trackProductById(index: number, item: IProduct) {
-    return item.id;
-  }
-
-  trackShoppingOrderById(index: number, item: IShoppingOrder) {
+  trackById(index: number, item: SelectableEntity): any {
     return item.id;
   }
 }

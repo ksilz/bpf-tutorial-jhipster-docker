@@ -1,6 +1,5 @@
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { MySimpleShopTestModule } from '../../../test.module';
@@ -18,7 +17,6 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [MySimpleShopTestModule],
         declarations: [ShipmentComponent],
-        providers: []
       })
         .overrideTemplate(ShipmentComponent, '')
         .compileComponents();
@@ -35,7 +33,7 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Shipment(123)],
-            headers
+            headers,
           })
         )
       );
@@ -45,7 +43,7 @@ describe('Component Tests', () => {
 
       // THEN
       expect(service.query).toHaveBeenCalled();
-      expect(comp.shipments[0]).toEqual(jasmine.objectContaining({ id: 123 }));
+      expect(comp.shipments && comp.shipments[0]).toEqual(jasmine.objectContaining({ id: 123 }));
     });
   });
 });

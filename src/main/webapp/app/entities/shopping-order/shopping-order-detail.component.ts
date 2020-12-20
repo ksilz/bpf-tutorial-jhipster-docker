@@ -5,20 +5,18 @@ import { IShoppingOrder } from 'app/shared/model/shopping-order.model';
 
 @Component({
   selector: 'bpf-shopping-order-detail',
-  templateUrl: './shopping-order-detail.component.html'
+  templateUrl: './shopping-order-detail.component.html',
 })
 export class ShoppingOrderDetailComponent implements OnInit {
-  shoppingOrder: IShoppingOrder;
+  shoppingOrder: IShoppingOrder | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 
-  ngOnInit() {
-    this.activatedRoute.data.subscribe(({ shoppingOrder }) => {
-      this.shoppingOrder = shoppingOrder;
-    });
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ shoppingOrder }) => (this.shoppingOrder = shoppingOrder));
   }
 
-  previousState() {
+  previousState(): void {
     window.history.back();
   }
 }

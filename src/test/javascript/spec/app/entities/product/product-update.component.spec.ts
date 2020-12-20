@@ -1,8 +1,7 @@
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 
 import { MySimpleShopTestModule } from '../../../test.module';
 import { ProductUpdateComponent } from 'app/entities/product/product-update.component';
@@ -19,7 +18,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [MySimpleShopTestModule],
         declarations: [ProductUpdateComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(ProductUpdateComponent, '')
         .compileComponents();

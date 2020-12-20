@@ -1,6 +1,7 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.repository;
 
 import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.ShoppingOrder;
+
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +16,4 @@ public interface ShoppingOrderRepository extends JpaRepository<ShoppingOrder, Lo
 
     @Query("select shoppingOrder from ShoppingOrder shoppingOrder where shoppingOrder.buyer.login = ?#{principal.username}")
     List<ShoppingOrder> findByBuyerIsCurrentUser();
-
 }

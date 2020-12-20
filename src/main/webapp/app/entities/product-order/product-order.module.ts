@@ -1,45 +1,16 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core';
 
-import { MySimpleShopSharedModule } from 'app/shared';
-import {
-  ProductOrderComponent,
-  ProductOrderDetailComponent,
-  ProductOrderUpdateComponent,
-  ProductOrderDeletePopupComponent,
-  ProductOrderDeleteDialogComponent,
-  productOrderRoute,
-  productOrderPopupRoute
-} from './';
-
-const ENTITY_STATES = [...productOrderRoute, ...productOrderPopupRoute];
+import { MySimpleShopSharedModule } from 'app/shared/shared.module';
+import { ProductOrderComponent } from './product-order.component';
+import { ProductOrderDetailComponent } from './product-order-detail.component';
+import { ProductOrderUpdateComponent } from './product-order-update.component';
+import { ProductOrderDeleteDialogComponent } from './product-order-delete-dialog.component';
+import { productOrderRoute } from './product-order.route';
 
 @NgModule({
-  imports: [MySimpleShopSharedModule, RouterModule.forChild(ENTITY_STATES)],
-  declarations: [
-    ProductOrderComponent,
-    ProductOrderDetailComponent,
-    ProductOrderUpdateComponent,
-    ProductOrderDeleteDialogComponent,
-    ProductOrderDeletePopupComponent
-  ],
-  entryComponents: [
-    ProductOrderComponent,
-    ProductOrderUpdateComponent,
-    ProductOrderDeleteDialogComponent,
-    ProductOrderDeletePopupComponent
-  ],
-  providers: [{ provide: JhiLanguageService, useClass: JhiLanguageService }],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [MySimpleShopSharedModule, RouterModule.forChild(productOrderRoute)],
+  declarations: [ProductOrderComponent, ProductOrderDetailComponent, ProductOrderUpdateComponent, ProductOrderDeleteDialogComponent],
+  entryComponents: [ProductOrderDeleteDialogComponent],
 })
-export class MySimpleShopProductOrderModule {
-  constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-    this.languageHelper.language.subscribe((languageKey: string) => {
-      if (languageKey) {
-        this.languageService.changeLanguage(languageKey);
-      }
-    });
-  }
-}
+export class MySimpleShopProductOrderModule {}

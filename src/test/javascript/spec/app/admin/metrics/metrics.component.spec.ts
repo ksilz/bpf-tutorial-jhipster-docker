@@ -1,30 +1,29 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 
 import { MySimpleShopTestModule } from '../../../test.module';
-import { BpfMetricsMonitoringComponent } from 'app/admin/metrics/metrics.component';
-import { BpfMetricsService } from 'app/admin/metrics/metrics.service';
+import { MetricsComponent } from 'app/admin/metrics/metrics.component';
+import { MetricsService } from 'app/admin/metrics/metrics.service';
 
 describe('Component Tests', () => {
-  describe('BpfMetricsMonitoringComponent', () => {
-    let comp: BpfMetricsMonitoringComponent;
-    let fixture: ComponentFixture<BpfMetricsMonitoringComponent>;
-    let service: BpfMetricsService;
+  describe('MetricsComponent', () => {
+    let comp: MetricsComponent;
+    let fixture: ComponentFixture<MetricsComponent>;
+    let service: MetricsService;
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [MySimpleShopTestModule],
-        declarations: [BpfMetricsMonitoringComponent]
+        declarations: [MetricsComponent],
       })
-        .overrideTemplate(BpfMetricsMonitoringComponent, '')
+        .overrideTemplate(MetricsComponent, '')
         .compileComponents();
     }));
 
     beforeEach(() => {
-      fixture = TestBed.createComponent(BpfMetricsMonitoringComponent);
+      fixture = TestBed.createComponent(MetricsComponent);
       comp = fixture.componentInstance;
-      service = fixture.debugElement.injector.get(BpfMetricsService);
+      service = fixture.debugElement.injector.get(MetricsService);
     });
 
     describe('refresh', () => {
@@ -33,14 +32,14 @@ describe('Component Tests', () => {
         const response = {
           timers: {
             service: 'test',
-            unrelatedKey: 'test'
+            unrelatedKey: 'test',
           },
           gauges: {
             'jcache.statistics': {
-              value: 2
+              value: 2,
             },
-            unrelatedKey: 'test'
-          }
+            unrelatedKey: 'test',
+          },
         };
         spyOn(service, 'getMetrics').and.returnValue(of(response));
 

@@ -1,11 +1,11 @@
 import { Route } from '@angular/router';
 
-import { BpfDocsComponent } from './docs.component';
+import { DocsComponent } from './docs.component';
 
 export const docsRoute: Route = {
-  path: 'docs',
-  component: BpfDocsComponent,
+  path: '',
+  component: DocsComponent,
   data: {
-    pageTitle: 'global.menu.admin.apidocs'
-  }
+    pageTitle: 'global.menu.admin.apidocs',
+  },
 };

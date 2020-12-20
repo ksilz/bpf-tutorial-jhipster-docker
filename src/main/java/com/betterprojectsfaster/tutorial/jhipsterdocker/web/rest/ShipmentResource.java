@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -82,7 +81,6 @@ public class ShipmentResource {
     /**
      * {@code GET  /shipments} : get all the shipments.
      *
-
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of shipments in body.
      */
     @GetMapping("/shipments")

@@ -6,10 +6,7 @@
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
     "jhiPrefix": "bpf",
-    "languages": [
-      "en",
-      "de"
-    ],
+    "languages": ["en", "de"],
     "messageBroker": false,
     "nativeLanguage": "en",
     "packageName": "com.betterprojectsfaster.tutorial.jhipsterdocker",
@@ -19,9 +16,7 @@
     "serviceDiscoveryType": false,
     "skipClient": false,
     "skipServer": false,
-    "testFrameworks": [
-      "protractor"
-    ],
+    "testFrameworks": ["protractor"],
     "websocket": "spring-websocket",
     "baseName": "my_simple_shop",
     "applicationType": "monolith",
@@ -31,7 +26,7 @@
     "clientFramework": "angularX",
     "useSass": true,
     "clientPackageManager": "npm",
-    "jhipsterVersion": "6.2.0",
+    "jhipsterVersion": "6.10.5",
     "skipUserManagement": false,
     "clientTheme": "none",
     "clientThemeVariant": "",
@@ -40,13 +35,9 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "blueprints": []
+    "blueprints": [],
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1608489223171
   },
-  "entities": [
-    "Product",
-    "Address",
-    "ShoppingOrder",
-    "ProductOrder",
-    "Shipment"
-  ]
+  "entities": ["Product", "Address", "ShoppingOrder", "ProductOrder", "Shipment"]
 }

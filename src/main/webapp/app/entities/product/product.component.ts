@@ -1,74 +1,62 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
+import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IProduct } from 'app/shared/model/product.model';
-import { AccountService } from 'app/core';
 import { ProductService } from './product.service';
+import { ProductDeleteDialogComponent } from './product-delete-dialog.component';
 
 @Component({
   selector: 'bpf-product',
-  templateUrl: './product.component.html'
+  templateUrl: './product.component.html',
 })
 export class ProductComponent implements OnInit, OnDestroy {
-  products: IProduct[];
-  currentAccount: any;
-  eventSubscriber: Subscription;
+  products?: IProduct[];
+  eventSubscriber?: Subscription;
 
   constructor(
     protected productService: ProductService,
-    protected jhiAlertService: JhiAlertService,
     protected dataUtils: JhiDataUtils,
     protected eventManager: JhiEventManager,
-    protected accountService: AccountService
+    protected modalService: NgbModal
   ) {}
 
-  loadAll() {
-    this.productService
-      .query()
-      .pipe(
-        filter((res: HttpResponse<IProduct[]>) => res.ok),
-        map((res: HttpResponse<IProduct[]>) => res.body)
-      )
-      .subscribe(
-        (res: IProduct[]) => {
-          this.products = res;
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+  loadAll(): void {
+    this.productService.query().subscribe((res: HttpResponse<IProduct[]>) => (this.products = res.body || []));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
-    this.accountService.identity().then(account => {
-      this.currentAccount = account;
-    });
     this.registerChangeInProducts();
   }
 
-  ngOnDestroy() {
-    this.eventManager.destroy(this.eventSubscriber);
+  ngOnDestroy(): void {
+    if (this.eventSubscriber) {
+      this.eventManager.destroy(this.eventSubscriber);
+    }
   }
 
-  trackId(index: number, item: IProduct) {
-    return item.id;
+  trackId(index: number, item: IProduct): number {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return item.id!;
   }
 
-  byteSize(field) {
-    return this.dataUtils.byteSize(field);
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
   }
 
-  openFile(contentType, field) {
-    return this.dataUtils.openFile(contentType, field);
+  openFile(contentType = '', base64String: string): void {
+    return this.dataUtils.openFile(contentType, base64String);
   }
 
-  registerChangeInProducts() {
-    this.eventSubscriber = this.eventManager.subscribe('productListModification', response => this.loadAll());
+  registerChangeInProducts(): void {
+    this.eventSubscriber = this.eventManager.subscribe('productListModification', () => this.loadAll());
   }
 
-  protected onError(errorMessage: string) {
-    this.jhiAlertService.error(errorMessage, null, null);
+  delete(product: IProduct): void {
+    const modalRef = this.modalService.open(ProductDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.product = product;
   }
 }

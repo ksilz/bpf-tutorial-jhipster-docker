@@ -1,23 +1,25 @@
-import { browser, ExpectedConditions, element, by, ElementFinder } from 'protractor';
+import { element, by, ElementFinder } from 'protractor';
 
 export class ProductComponentsPage {
   createButton = element(by.id('jh-create-entity'));
   deleteButtons = element.all(by.css('bpf-product div table .btn-danger'));
   title = element.all(by.css('bpf-product div h2#page-heading span')).first();
+  noResult = element(by.id('no-result'));
+  entities = element(by.id('entities'));
 
-  async clickOnCreateButton(timeout?: number) {
+  async clickOnCreateButton(): Promise<void> {
     await this.createButton.click();
   }
 
-  async clickOnLastDeleteButton(timeout?: number) {
+  async clickOnLastDeleteButton(): Promise<void> {
     await this.deleteButtons.last().click();
   }
 
-  async countDeleteButtons() {
+  async countDeleteButtons(): Promise<number> {
     return this.deleteButtons.count();
   }
 
-  async getTitle() {
+  async getTitle(): Promise<string> {
     return this.title.getAttribute('jhiTranslate');
   }
 }
@@ -26,6 +28,7 @@ export class ProductUpdatePage {
   pageTitle = element(by.id('bpf-product-heading'));
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
+
   nameInput = element(by.id('field_name'));
   priceInput = element(by.id('field_price'));
   descriptionInput = element(by.id('field_description'));
@@ -34,78 +37,75 @@ export class ProductUpdatePage {
   categorySelect = element(by.id('field_category'));
   inventoryInput = element(by.id('field_inventory'));
 
-  async getPageTitle() {
+  async getPageTitle(): Promise<string> {
     return this.pageTitle.getAttribute('jhiTranslate');
   }
 
-  async setNameInput(name) {
+  async setNameInput(name: string): Promise<void> {
     await this.nameInput.sendKeys(name);
   }
 
-  async getNameInput() {
+  async getNameInput(): Promise<string> {
     return await this.nameInput.getAttribute('value');
   }
 
-  async setPriceInput(price) {
+  async setPriceInput(price: string): Promise<void> {
     await this.priceInput.sendKeys(price);
   }
 
-  async getPriceInput() {
+  async getPriceInput(): Promise<string> {
     return await this.priceInput.getAttribute('value');
   }
 
-  async setDescriptionInput(description) {
+  async setDescriptionInput(description: string): Promise<void> {
     await this.descriptionInput.sendKeys(description);
   }
 
-  async getDescriptionInput() {
+  async getDescriptionInput(): Promise<string> {
     return await this.descriptionInput.getAttribute('value');
   }
 
-  async setPictureInput(picture) {
+  async setPictureInput(picture: string): Promise<void> {
     await this.pictureInput.sendKeys(picture);
   }
 
-  async getPictureInput() {
+  async getPictureInput(): Promise<string> {
     return await this.pictureInput.getAttribute('value');
   }
 
-  async setSpecificationInput(specification) {
+  async setSpecificationInput(specification: string): Promise<void> {
     await this.specificationInput.sendKeys(specification);
   }
 
-  async getSpecificationInput() {
+  async getSpecificationInput(): Promise<string> {
     return await this.specificationInput.getAttribute('value');
   }
 
-  async setCategorySelect(category) {
+  async setCategorySelect(category: string): Promise<void> {
     await this.categorySelect.sendKeys(category);
   }
 
-  async getCategorySelect() {
+  async getCategorySelect(): Promise<string> {
     return await this.categorySelect.element(by.css('option:checked')).getText();
   }
 
-  async categorySelectLastOption(timeout?: number) {
-    await this.categorySelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
+  async categorySelectLastOption(): Promise<void> {
+    await this.categorySelect.all(by.tagName('option')).last().click();
   }
 
-  async setInventoryInput(inventory) {
+  async setInventoryInput(inventory: string): Promise<void> {
     await this.inventoryInput.sendKeys(inventory);
   }
 
-  async getInventoryInput() {
+  async getInventoryInput(): Promise<string> {
     return await this.inventoryInput.getAttribute('value');
   }
 
-  async save(timeout?: number) {
+  async save(): Promise<void> {
     await this.saveButton.click();
   }
 
-  async cancel(timeout?: number) {
+  async cancel(): Promise<void> {
     await this.cancelButton.click();
   }
 
@@ -118,11 +118,11 @@ export class ProductDeleteDialog {
   private dialogTitle = element(by.id('bpf-delete-product-heading'));
   private confirmButton = element(by.id('bpf-confirm-delete-product'));
 
-  async getDialogTitle() {
+  async getDialogTitle(): Promise<string> {
     return this.dialogTitle.getAttribute('jhiTranslate');
   }
 
-  async clickOnConfirmButton(timeout?: number) {
+  async clickOnConfirmButton(): Promise<void> {
     await this.confirmButton.click();
   }
 }

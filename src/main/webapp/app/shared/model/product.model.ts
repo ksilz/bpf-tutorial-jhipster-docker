@@ -1,12 +1,5 @@
 import { IProductOrder } from 'app/shared/model/product-order.model';
-
-export const enum ProductCategory {
-  Laptop = 'Laptop',
-  Desktop = 'Desktop',
-  Phone = 'Phone',
-  Tablet = 'Tablet',
-  Accessory = 'Accessory'
-}
+import { ProductCategory } from 'app/shared/model/enumerations/product-category.model';
 
 export interface IProduct {
   id?: number;

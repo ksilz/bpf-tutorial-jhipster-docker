@@ -1,13 +1,13 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Address} entity.
  */
 public class AddressDTO implements Serializable {
-
+    
     private Long id;
 
     @NotNull
@@ -27,7 +27,7 @@ public class AddressDTO implements Serializable {
     private Long userId;
 
     private String userLogin;
-
+    
     public Long getId() {
         return id;
     }
@@ -89,22 +89,19 @@ public class AddressDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof AddressDTO)) {
             return false;
         }
 
-        AddressDTO addressDTO = (AddressDTO) o;
-        if (addressDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), addressDTO.getId());
+        return id != null && id.equals(((AddressDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "AddressDTO{" +
@@ -113,8 +110,8 @@ public class AddressDTO implements Serializable {
             ", addressLine2='" + getAddressLine2() + "'" +
             ", city='" + getCity() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
-            ", user=" + getUserId() +
-            ", user='" + getUserLogin() + "'" +
+            ", userId=" + getUserId() +
+            ", userLogin='" + getUserLogin() + "'" +
             "}";
     }
 }

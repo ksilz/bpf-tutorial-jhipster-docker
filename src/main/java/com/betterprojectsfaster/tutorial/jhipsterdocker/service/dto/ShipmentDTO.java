@@ -1,14 +1,14 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Shipment} entity.
  */
 public class ShipmentDTO implements Serializable {
-
+    
     private Long id;
 
     @NotNull
@@ -22,7 +22,7 @@ public class ShipmentDTO implements Serializable {
     private Long shippedById;
 
     private String shippedByLogin;
-
+    
     public Long getId() {
         return id;
     }
@@ -76,31 +76,28 @@ public class ShipmentDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof ShipmentDTO)) {
             return false;
         }
 
-        ShipmentDTO shipmentDTO = (ShipmentDTO) o;
-        if (shipmentDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), shipmentDTO.getId());
+        return id != null && id.equals(((ShipmentDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "ShipmentDTO{" +
             "id=" + getId() +
             ", shippedAt='" + getShippedAt() + "'" +
-            ", order=" + getOrderId() +
-            ", order='" + getOrderName() + "'" +
-            ", shippedBy=" + getShippedById() +
-            ", shippedBy='" + getShippedByLogin() + "'" +
+            ", orderId=" + getOrderId() +
+            ", orderName='" + getOrderName() + "'" +
+            ", shippedById=" + getShippedById() +
+            ", shippedByLogin='" + getShippedByLogin() + "'" +
             "}";
     }
 }

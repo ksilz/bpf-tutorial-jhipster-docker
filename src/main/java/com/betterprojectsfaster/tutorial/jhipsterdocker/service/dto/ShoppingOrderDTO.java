@@ -1,14 +1,14 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.ShoppingOrder} entity.
  */
 public class ShoppingOrderDTO implements Serializable {
-
+    
     private Long id;
 
     @NotNull
@@ -24,7 +24,7 @@ public class ShoppingOrderDTO implements Serializable {
     private Long buyerId;
 
     private String buyerLogin;
-
+    
     public Long getId() {
         return id;
     }
@@ -78,22 +78,19 @@ public class ShoppingOrderDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof ShoppingOrderDTO)) {
             return false;
         }
 
-        ShoppingOrderDTO shoppingOrderDTO = (ShoppingOrderDTO) o;
-        if (shoppingOrderDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), shoppingOrderDTO.getId());
+        return id != null && id.equals(((ShoppingOrderDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "ShoppingOrderDTO{" +
@@ -101,8 +98,8 @@ public class ShoppingOrderDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", totalAmount=" + getTotalAmount() +
             ", ordered='" + getOrdered() + "'" +
-            ", buyer=" + getBuyerId() +
-            ", buyer='" + getBuyerLogin() + "'" +
+            ", buyerId=" + getBuyerId() +
+            ", buyerLogin='" + getBuyerLogin() + "'" +
             "}";
     }
 }

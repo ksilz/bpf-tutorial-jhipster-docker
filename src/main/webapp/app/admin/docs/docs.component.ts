@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'bpf-docs',
-  templateUrl: './docs.component.html'
+  templateUrl: './docs.component.html',
+  styleUrls: ['docs.scss'],
 })
-export class BpfDocsComponent {
-  constructor() {}
-}
+export class DocsComponent {}

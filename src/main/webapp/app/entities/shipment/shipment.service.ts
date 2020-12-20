@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import * as moment from 'moment';
-import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
+import * as moment from 'moment';
 
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/shared';
+import { createRequestOption } from 'app/shared/util/request-util';
 import { IShipment } from 'app/shared/model/shipment.model';
 
 type EntityResponseType = HttpResponse<IShipment>;
@@ -45,20 +45,20 @@ export class ShipmentService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<any>> {
-    return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   protected convertDateFromClient(shipment: IShipment): IShipment {
     const copy: IShipment = Object.assign({}, shipment, {
-      shippedAt: shipment.shippedAt != null && shipment.shippedAt.isValid() ? shipment.shippedAt.format(DATE_FORMAT) : null
+      shippedAt: shipment.shippedAt && shipment.shippedAt.isValid() ? shipment.shippedAt.format(DATE_FORMAT) : undefined,
     });
     return copy;
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
-      res.body.shippedAt = res.body.shippedAt != null ? moment(res.body.shippedAt) : null;
+      res.body.shippedAt = res.body.shippedAt ? moment(res.body.shippedAt) : undefined;
     }
     return res;
   }
@@ -66,7 +66,7 @@ export class ShipmentService {
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((shipment: IShipment) => {
-        shipment.shippedAt = shipment.shippedAt != null ? moment(shipment.shippedAt) : null;
+        shipment.shippedAt = shipment.shippedAt ? moment(shipment.shippedAt) : undefined;
       });
     }
     return res;

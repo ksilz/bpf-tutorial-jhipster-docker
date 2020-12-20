@@ -1,7 +1,7 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Objects;
 import javax.persistence.Lob;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.enumeration.ProductCategory;
 
@@ -9,7 +9,7 @@ import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.enumeration.Produ
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Product} entity.
  */
 public class ProductDTO implements Serializable {
-
+    
     private Long id;
 
     @NotNull
@@ -39,7 +39,7 @@ public class ProductDTO implements Serializable {
     @Min(value = 0)
     private Integer inventory;
 
-
+    
     public Long getId() {
         return id;
     }
@@ -125,22 +125,19 @@ public class ProductDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof ProductDTO)) {
             return false;
         }
 
-        ProductDTO productDTO = (ProductDTO) o;
-        if (productDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), productDTO.getId());
+        return id != null && id.equals(((ProductDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "ProductDTO{" +
