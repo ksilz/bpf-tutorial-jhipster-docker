@@ -1,17 +1,15 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.domain;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.enumeration.ProductCategory;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.enumeration.ProductCategory;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A Product.
@@ -38,13 +36,11 @@ public class Product implements Serializable {
     @Column(name = "price", nullable = false)
     private Float price;
 
-    
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description", nullable = false)
     private String description;
 
-    
     @Lob
     @Column(name = "picture", nullable = false)
     private byte[] picture;
@@ -70,6 +66,7 @@ public class Product implements Serializable {
 
     @OneToMany(mappedBy = "product")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "buyer", "product", "overallOrder" }, allowSetters = true)
     private Set<ProductOrder> productOrders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -81,8 +78,13 @@ public class Product implements Serializable {
         this.id = id;
     }
 
+    public Product id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public Product name(String name) {
@@ -95,7 +97,7 @@ public class Product implements Serializable {
     }
 
     public Float getPrice() {
-        return price;
+        return this.price;
     }
 
     public Product price(Float price) {
@@ -108,7 +110,7 @@ public class Product implements Serializable {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public Product description(String description) {
@@ -121,7 +123,7 @@ public class Product implements Serializable {
     }
 
     public byte[] getPicture() {
-        return picture;
+        return this.picture;
     }
 
     public Product picture(byte[] picture) {
@@ -134,7 +136,7 @@ public class Product implements Serializable {
     }
 
     public String getPictureContentType() {
-        return pictureContentType;
+        return this.pictureContentType;
     }
 
     public Product pictureContentType(String pictureContentType) {
@@ -147,7 +149,7 @@ public class Product implements Serializable {
     }
 
     public byte[] getSpecification() {
-        return specification;
+        return this.specification;
     }
 
     public Product specification(byte[] specification) {
@@ -160,7 +162,7 @@ public class Product implements Serializable {
     }
 
     public String getSpecificationContentType() {
-        return specificationContentType;
+        return this.specificationContentType;
     }
 
     public Product specificationContentType(String specificationContentType) {
@@ -173,7 +175,7 @@ public class Product implements Serializable {
     }
 
     public ProductCategory getCategory() {
-        return category;
+        return this.category;
     }
 
     public Product category(ProductCategory category) {
@@ -186,7 +188,7 @@ public class Product implements Serializable {
     }
 
     public Integer getInventory() {
-        return inventory;
+        return this.inventory;
     }
 
     public Product inventory(Integer inventory) {
@@ -199,11 +201,11 @@ public class Product implements Serializable {
     }
 
     public Set<ProductOrder> getProductOrders() {
-        return productOrders;
+        return this.productOrders;
     }
 
     public Product productOrders(Set<ProductOrder> productOrders) {
-        this.productOrders = productOrders;
+        this.setProductOrders(productOrders);
         return this;
     }
 
@@ -220,8 +222,15 @@ public class Product implements Serializable {
     }
 
     public void setProductOrders(Set<ProductOrder> productOrders) {
+        if (this.productOrders != null) {
+            this.productOrders.forEach(i -> i.setProduct(null));
+        }
+        if (productOrders != null) {
+            productOrders.forEach(i -> i.setProduct(this));
+        }
         this.productOrders = productOrders;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -237,7 +246,8 @@ public class Product implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

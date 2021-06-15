@@ -5,28 +5,14 @@ export interface IProduct {
   id?: number;
   name?: string;
   price?: number;
-  description?: any;
+  description?: string;
   pictureContentType?: string;
-  picture?: any;
-  specificationContentType?: string;
-  specification?: any;
-  category?: ProductCategory;
+  picture?: string;
+  specificationContentType?: string | null;
+  specification?: string | null;
+  category?: ProductCategory | null;
   inventory?: number;
-  productOrders?: IProductOrder[];
+  productOrders?: IProductOrder[] | null;
 }
 
-export class Product implements IProduct {
-  constructor(
-    public id?: number,
-    public name?: string,
-    public price?: number,
-    public description?: any,
-    public pictureContentType?: string,
-    public picture?: any,
-    public specificationContentType?: string,
-    public specification?: any,
-    public category?: ProductCategory,
-    public inventory?: number,
-    public productOrders?: IProductOrder[]
-  ) {}
-}
+export const defaultValue: Readonly<IProduct> = {};

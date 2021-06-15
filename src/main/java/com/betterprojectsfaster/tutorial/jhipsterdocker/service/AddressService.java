@@ -1,7 +1,6 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service;
 
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.AddressDTO;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import java.util.Optional;
  * Service Interface for managing {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Address}.
  */
 public interface AddressService {
-
     /**
      * Save a address.
      *
@@ -19,12 +17,19 @@ public interface AddressService {
     AddressDTO save(AddressDTO addressDTO);
 
     /**
+     * Partially updates a address.
+     *
+     * @param addressDTO the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<AddressDTO> partialUpdate(AddressDTO addressDTO);
+
+    /**
      * Get all the addresses.
      *
      * @return the list of entities.
      */
     List<AddressDTO> findAll();
-
 
     /**
      * Get the "id" address.

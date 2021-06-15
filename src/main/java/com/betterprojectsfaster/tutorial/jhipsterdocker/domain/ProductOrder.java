@@ -1,13 +1,11 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
+import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-
-import java.io.Serializable;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A ProductOrder.
@@ -32,17 +30,16 @@ public class ProductOrder implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "productOrders", allowSetters = true)
     private User buyer;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "productOrders", allowSetters = true)
+    @JsonIgnoreProperties(value = { "productOrders" }, allowSetters = true)
     private Product product;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "orders", allowSetters = true)
+    @JsonIgnoreProperties(value = { "orders", "buyer", "shipment" }, allowSetters = true)
     private ShoppingOrder overallOrder;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -54,8 +51,13 @@ public class ProductOrder implements Serializable {
         this.id = id;
     }
 
+    public ProductOrder id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public Integer getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public ProductOrder amount(Integer amount) {
@@ -68,11 +70,11 @@ public class ProductOrder implements Serializable {
     }
 
     public User getBuyer() {
-        return buyer;
+        return this.buyer;
     }
 
     public ProductOrder buyer(User user) {
-        this.buyer = user;
+        this.setBuyer(user);
         return this;
     }
 
@@ -81,11 +83,11 @@ public class ProductOrder implements Serializable {
     }
 
     public Product getProduct() {
-        return product;
+        return this.product;
     }
 
     public ProductOrder product(Product product) {
-        this.product = product;
+        this.setProduct(product);
         return this;
     }
 
@@ -94,17 +96,18 @@ public class ProductOrder implements Serializable {
     }
 
     public ShoppingOrder getOverallOrder() {
-        return overallOrder;
+        return this.overallOrder;
     }
 
     public ProductOrder overallOrder(ShoppingOrder shoppingOrder) {
-        this.overallOrder = shoppingOrder;
+        this.setOverallOrder(shoppingOrder);
         return this;
     }
 
     public void setOverallOrder(ShoppingOrder shoppingOrder) {
         this.overallOrder = shoppingOrder;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -120,7 +123,8 @@ public class ProductOrder implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

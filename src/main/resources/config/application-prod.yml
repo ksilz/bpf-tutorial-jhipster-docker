@@ -16,7 +16,7 @@
 logging:
   level:
     ROOT: INFO
-    io.github.jhipster: INFO
+    tech.jhipster: INFO
     com.betterprojectsfaster.tutorial.jhipsterdocker: INFO
 
 management:
@@ -40,8 +40,7 @@ spring:
       poolName: Hikari
       auto-commit: false
   jpa:
-    database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
-    show-sql: false
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
@@ -74,6 +73,7 @@ spring:
 # ===================================================================
 server:
   port: 8080
+  shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
   compression:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
@@ -101,16 +101,12 @@ jhipster:
         # - In the JHipster Registry (which includes a Spring Cloud Config server)
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: ZjVkNThmYTUwYmFkMzRlNTU4MjI0NmM1MmRlOWUwYTgzOTc3NGZjZmU0MGQ1NGYyY2Y0NzRkZDYyZjcyNWQ5MjhjMTJiNDI0ZGMzOTRhMjYwMzE1MzkwMzkyZmQwMDA5MDNiYzUzZjBlODY5MzgwZWYwZWI4YjEyNjc1MTg3MTc=
+        base64-secret: YjdiZjc2ZTE3NTY1ZGUzMmUxYTQ1MDQ1OGE0MmI2ZmI3Y2Y3MTM1YzkyY2M2MjlkZmU2MmMzMTJjMWM0NzM0ZmVmNDk1NDM1MjJiODE1OWFlMmIzNWRjZmQ3NzYwZWI3ZTcxZDI5NDZkNTFkNjEwZTM1YTE1M2VjODE0YTg2MTc=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://my-server-url-to-change # Modify according to your server's URL
-  metrics:
-    logs: # Reports metrics in the logs
-      enabled: false
-      report-frequency: 60 # in seconds
   logging:
     use-json-format: false # By default, logs are not in Json format
     logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
@@ -118,9 +114,6 @@ jhipster:
       host: localhost
       port: 5000
       queue-size: 512
-  audit-events:
-    retention-period: 30 # Number of days before audit events are deleted.
-
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

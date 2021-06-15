@@ -1,0 +1,29 @@
+{
+  "mySimpleShopApp": {
+    "shoppingOrder": {
+      "home": {
+        "title": "Shopping Orders",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Shopping Order",
+        "createOrEditLabel": "Создать или отредактировать Shopping Order",
+        "notFound": "Shopping Orders не найдено"
+      },
+      "created": "Новый Shopping Order создан с идентификатором {{ param }}",
+      "updated": "Shopping Order обновлен с идентификатором {{ param }}",
+      "deleted": "Shopping Order удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Shopping Order {{ id }}?"
+      },
+      "detail": {
+        "title": "Shopping Order"
+      },
+      "id": "ID",
+      "name": "Name",
+      "totalAmount": "Total Amount",
+      "ordered": "Ordered",
+      "orders": "Orders",
+      "buyer": "Buyer",
+      "shipment": "Shipment"
+    }
+  }
+}

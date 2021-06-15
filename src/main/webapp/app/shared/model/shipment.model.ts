@@ -1,21 +1,12 @@
-import { Moment } from 'moment';
+import dayjs from 'dayjs';
+import { IShoppingOrder } from 'app/shared/model/shopping-order.model';
+import { IUser } from 'app/shared/model/user.model';
 
 export interface IShipment {
   id?: number;
-  shippedAt?: Moment;
-  orderName?: string;
-  orderId?: number;
-  shippedByLogin?: string;
-  shippedById?: number;
+  shippedAt?: string;
+  order?: IShoppingOrder;
+  shippedBy?: IUser;
 }
 
-export class Shipment implements IShipment {
-  constructor(
-    public id?: number,
-    public shippedAt?: Moment,
-    public orderName?: string,
-    public orderId?: number,
-    public shippedByLogin?: string,
-    public shippedById?: number
-  ) {}
-}
+export const defaultValue: Readonly<IShipment> = {};

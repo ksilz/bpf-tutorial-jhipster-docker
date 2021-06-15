@@ -1,17 +1,14 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A ShoppingOrder.
@@ -42,15 +39,15 @@ public class ShoppingOrder implements Serializable {
 
     @OneToMany(mappedBy = "overallOrder")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "buyer", "product", "overallOrder" }, allowSetters = true)
     private Set<ProductOrder> orders = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "shoppingOrders", allowSetters = true)
     private User buyer;
 
+    @JsonIgnoreProperties(value = { "order", "shippedBy" }, allowSetters = true)
     @OneToOne(mappedBy = "order")
-    @JsonIgnore
     private Shipment shipment;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -62,8 +59,13 @@ public class ShoppingOrder implements Serializable {
         this.id = id;
     }
 
+    public ShoppingOrder id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public ShoppingOrder name(String name) {
@@ -76,7 +78,7 @@ public class ShoppingOrder implements Serializable {
     }
 
     public Float getTotalAmount() {
-        return totalAmount;
+        return this.totalAmount;
     }
 
     public ShoppingOrder totalAmount(Float totalAmount) {
@@ -89,7 +91,7 @@ public class ShoppingOrder implements Serializable {
     }
 
     public LocalDate getOrdered() {
-        return ordered;
+        return this.ordered;
     }
 
     public ShoppingOrder ordered(LocalDate ordered) {
@@ -102,11 +104,11 @@ public class ShoppingOrder implements Serializable {
     }
 
     public Set<ProductOrder> getOrders() {
-        return orders;
+        return this.orders;
     }
 
     public ShoppingOrder orders(Set<ProductOrder> productOrders) {
-        this.orders = productOrders;
+        this.setOrders(productOrders);
         return this;
     }
 
@@ -123,15 +125,21 @@ public class ShoppingOrder implements Serializable {
     }
 
     public void setOrders(Set<ProductOrder> productOrders) {
+        if (this.orders != null) {
+            this.orders.forEach(i -> i.setOverallOrder(null));
+        }
+        if (productOrders != null) {
+            productOrders.forEach(i -> i.setOverallOrder(this));
+        }
         this.orders = productOrders;
     }
 
     public User getBuyer() {
-        return buyer;
+        return this.buyer;
     }
 
     public ShoppingOrder buyer(User user) {
-        this.buyer = user;
+        this.setBuyer(user);
         return this;
     }
 
@@ -140,17 +148,24 @@ public class ShoppingOrder implements Serializable {
     }
 
     public Shipment getShipment() {
-        return shipment;
+        return this.shipment;
     }
 
     public ShoppingOrder shipment(Shipment shipment) {
-        this.shipment = shipment;
+        this.setShipment(shipment);
         return this;
     }
 
     public void setShipment(Shipment shipment) {
+        if (this.shipment != null) {
+            this.shipment.setOrder(null);
+        }
+        if (shipment != null) {
+            shipment.setOrder(this);
+        }
         this.shipment = shipment;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -166,7 +181,8 @@ public class ShoppingOrder implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

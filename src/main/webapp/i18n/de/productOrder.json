@@ -3,9 +3,10 @@
     "productOrder": {
       "home": {
         "title": "Product Orders",
+        "refreshListLabel": "Liste aktualisieren",
         "createLabel": "Product Order erstellen",
         "createOrEditLabel": "Product Order erstellen oder bearbeiten",
-        "notFound": "No Product Orders found"
+        "notFound": "Keine Product Orders gefunden"
       },
       "created": "Product Order erstellt mit ID {{ param }}",
       "updated": "Product Order aktualisiert mit ID {{ param }}",
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Product Order"
       },
+      "id": "ID",
       "amount": "Amount",
       "buyer": "Buyer",
       "product": "Product",

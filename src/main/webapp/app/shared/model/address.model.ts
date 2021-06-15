@@ -1,21 +1,12 @@
+import { IUser } from 'app/shared/model/user.model';
+
 export interface IAddress {
   id?: number;
   addressLine1?: string;
-  addressLine2?: string;
-  city?: string;
-  postalCode?: string;
-  userLogin?: string;
-  userId?: number;
+  addressLine2?: string | null;
+  city?: string | null;
+  postalCode?: string | null;
+  user?: IUser;
 }
 
-export class Address implements IAddress {
-  constructor(
-    public id?: number,
-    public addressLine1?: string,
-    public addressLine2?: string,
-    public city?: string,
-    public postalCode?: string,
-    public userLogin?: string,
-    public userId?: number
-  ) {}
-}
+export const defaultValue: Readonly<IAddress> = {};

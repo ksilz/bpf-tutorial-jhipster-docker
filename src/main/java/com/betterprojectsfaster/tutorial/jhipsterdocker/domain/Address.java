@@ -1,13 +1,10 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
+import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-
-import java.io.Serializable;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Address.
@@ -43,7 +40,6 @@ public class Address implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "addresses", allowSetters = true)
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -55,8 +51,13 @@ public class Address implements Serializable {
         this.id = id;
     }
 
+    public Address id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getAddressLine1() {
-        return addressLine1;
+        return this.addressLine1;
     }
 
     public Address addressLine1(String addressLine1) {
@@ -69,7 +70,7 @@ public class Address implements Serializable {
     }
 
     public String getAddressLine2() {
-        return addressLine2;
+        return this.addressLine2;
     }
 
     public Address addressLine2(String addressLine2) {
@@ -82,7 +83,7 @@ public class Address implements Serializable {
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
     public Address city(String city) {
@@ -95,7 +96,7 @@ public class Address implements Serializable {
     }
 
     public String getPostalCode() {
-        return postalCode;
+        return this.postalCode;
     }
 
     public Address postalCode(String postalCode) {
@@ -108,17 +109,18 @@ public class Address implements Serializable {
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
     public Address user(User user) {
-        this.user = user;
+        this.setUser(user);
         return this;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -134,7 +136,8 @@ public class Address implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

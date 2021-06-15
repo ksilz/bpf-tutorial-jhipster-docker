@@ -1,13 +1,14 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.domain;
 
-import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.TestUtil;
 
-public class ProductOrderTest {
+import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
+
+class ProductOrderTest {
 
     @Test
-    public void equalsVerifier() throws Exception {
+    void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(ProductOrder.class);
         ProductOrder productOrder1 = new ProductOrder();
         productOrder1.setId(1L);

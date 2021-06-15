@@ -2,23 +2,32 @@ application {
   config {
     baseName my_simple_shop
     applicationType monolith
-    packageName com.betterprojectsfaster.tutorial.jhipsterdocker
     authenticationType jwt
-    buildTool gradle
+    buildTool maven
+    cacheProvider ehcache
+    clientFramework react
+    clientPackageManager npm
+    clientTheme litera
+    clientThemeVariant primary
     databaseType sql
     devDatabaseType h2Disk
-    prodDatabaseType postgresql
-    cacheProvider ehcache
+    dtoSuffix DTO
     enableHibernateCache true
-    clientFramework angularX
-    useSass false
-    clientPackageManager npm
-    jhiPrefix bpf
     enableTranslation true
+    jhiPrefix bpf
+    languages [en, de, ru]
+    messageBroker false
     nativeLanguage en
-    languages [en, de]
+    packageName com.betterprojectsfaster.tutorial.jhipsterdocker
+    prodDatabaseType postgresql
+    reactive false
+    searchEngine false
+    serverPort 8080
+    skipClient false
+    skipServer false
+    skipUserManagement false
     websocket spring-websocket
-    testFrameworks [protractor]
+    testFrameworks [cypress]
   }
   entities *
 }

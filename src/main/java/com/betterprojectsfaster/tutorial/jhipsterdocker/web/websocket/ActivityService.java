@@ -3,10 +3,8 @@ package com.betterprojectsfaster.tutorial.jhipsterdocker.web.websocket;
 import static com.betterprojectsfaster.tutorial.jhipsterdocker.config.WebsocketConfiguration.IP_ADDRESS;
 
 import com.betterprojectsfaster.tutorial.jhipsterdocker.web.websocket.dto.ActivityDTO;
-
 import java.security.Principal;
 import java.time.Instant;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;

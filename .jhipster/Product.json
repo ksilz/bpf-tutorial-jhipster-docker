@@ -5,14 +5,14 @@
       "fieldName": "name",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique", "minlength", "maxlength"],
-      "fieldValidateRulesMinlength": 2,
-      "fieldValidateRulesMaxlength": 90
+      "fieldValidateRulesMinlength": "2",
+      "fieldValidateRulesMaxlength": "90"
     },
     {
       "fieldName": "price",
       "fieldType": "Float",
       "fieldValidateRules": ["required", "min"],
-      "fieldValidateRulesMin": 0
+      "fieldValidateRulesMin": "0"
     },
     {
       "fieldName": "description",
@@ -40,7 +40,7 @@
       "fieldName": "inventory",
       "fieldType": "Integer",
       "fieldValidateRules": ["required", "min"],
-      "fieldValidateRulesMin": 0
+      "fieldValidateRulesMin": "0"
     }
   ],
   "relationships": [
@@ -51,13 +51,14 @@
       "relationshipName": "productOrder"
     }
   ],
-  "changelogDate": "20190801122745",
   "entityTableName": "product",
   "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
-  "clientRootFolder": "",
-  "applications": ["my_simple_shop"]
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["my_simple_shop"],
+  "changelogDate": "20210615120330"
 }

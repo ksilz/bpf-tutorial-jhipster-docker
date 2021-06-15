@@ -1,13 +1,14 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
 
-import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.ProductOrder} entity.
  */
 public class ProductOrderDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
@@ -15,19 +16,12 @@ public class ProductOrderDTO implements Serializable {
     @Max(value = 5)
     private Integer amount;
 
+    private UserDTO buyer;
 
-    private Long buyerId;
+    private ProductDTO product;
 
-    private String buyerLogin;
+    private ShoppingOrderDTO overallOrder;
 
-    private Long productId;
-
-    private String productName;
-
-    private Long overallOrderId;
-
-    private String overallOrderName;
-    
     public Long getId() {
         return id;
     }
@@ -44,52 +38,28 @@ public class ProductOrderDTO implements Serializable {
         this.amount = amount;
     }
 
-    public Long getBuyerId() {
-        return buyerId;
+    public UserDTO getBuyer() {
+        return buyer;
     }
 
-    public void setBuyerId(Long userId) {
-        this.buyerId = userId;
+    public void setBuyer(UserDTO buyer) {
+        this.buyer = buyer;
     }
 
-    public String getBuyerLogin() {
-        return buyerLogin;
+    public ProductDTO getProduct() {
+        return product;
     }
 
-    public void setBuyerLogin(String userLogin) {
-        this.buyerLogin = userLogin;
+    public void setProduct(ProductDTO product) {
+        this.product = product;
     }
 
-    public Long getProductId() {
-        return productId;
+    public ShoppingOrderDTO getOverallOrder() {
+        return overallOrder;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public Long getOverallOrderId() {
-        return overallOrderId;
-    }
-
-    public void setOverallOrderId(Long shoppingOrderId) {
-        this.overallOrderId = shoppingOrderId;
-    }
-
-    public String getOverallOrderName() {
-        return overallOrderName;
-    }
-
-    public void setOverallOrderName(String shoppingOrderName) {
-        this.overallOrderName = shoppingOrderName;
+    public void setOverallOrder(ShoppingOrderDTO overallOrder) {
+        this.overallOrder = overallOrder;
     }
 
     @Override
@@ -101,12 +71,16 @@ public class ProductOrderDTO implements Serializable {
             return false;
         }
 
-        return id != null && id.equals(((ProductOrderDTO) o).id);
+        ProductOrderDTO productOrderDTO = (ProductOrderDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, productOrderDTO.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(this.id);
     }
 
     // prettier-ignore
@@ -115,12 +89,9 @@ public class ProductOrderDTO implements Serializable {
         return "ProductOrderDTO{" +
             "id=" + getId() +
             ", amount=" + getAmount() +
-            ", buyerId=" + getBuyerId() +
-            ", buyerLogin='" + getBuyerLogin() + "'" +
-            ", productId=" + getProductId() +
-            ", productName='" + getProductName() + "'" +
-            ", overallOrderId=" + getOverallOrderId() +
-            ", overallOrderName='" + getOverallOrderName() + "'" +
+            ", buyer=" + getBuyer() +
+            ", product=" + getProduct() +
+            ", overallOrder=" + getOverallOrder() +
             "}";
     }
 }

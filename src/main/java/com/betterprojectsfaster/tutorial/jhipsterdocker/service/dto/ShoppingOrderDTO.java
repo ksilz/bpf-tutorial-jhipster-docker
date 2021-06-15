@@ -1,14 +1,15 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
 
-import java.time.LocalDate;
-import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.ShoppingOrder} entity.
  */
 public class ShoppingOrderDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
@@ -20,11 +21,8 @@ public class ShoppingOrderDTO implements Serializable {
 
     private LocalDate ordered;
 
+    private UserDTO buyer;
 
-    private Long buyerId;
-
-    private String buyerLogin;
-    
     public Long getId() {
         return id;
     }
@@ -57,20 +55,12 @@ public class ShoppingOrderDTO implements Serializable {
         this.ordered = ordered;
     }
 
-    public Long getBuyerId() {
-        return buyerId;
+    public UserDTO getBuyer() {
+        return buyer;
     }
 
-    public void setBuyerId(Long userId) {
-        this.buyerId = userId;
-    }
-
-    public String getBuyerLogin() {
-        return buyerLogin;
-    }
-
-    public void setBuyerLogin(String userLogin) {
-        this.buyerLogin = userLogin;
+    public void setBuyer(UserDTO buyer) {
+        this.buyer = buyer;
     }
 
     @Override
@@ -82,12 +72,16 @@ public class ShoppingOrderDTO implements Serializable {
             return false;
         }
 
-        return id != null && id.equals(((ShoppingOrderDTO) o).id);
+        ShoppingOrderDTO shoppingOrderDTO = (ShoppingOrderDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, shoppingOrderDTO.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(this.id);
     }
 
     // prettier-ignore
@@ -98,8 +92,7 @@ public class ShoppingOrderDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", totalAmount=" + getTotalAmount() +
             ", ordered='" + getOrdered() + "'" +
-            ", buyerId=" + getBuyerId() +
-            ", buyerLogin='" + getBuyerLogin() + "'" +
+            ", buyer=" + getBuyer() +
             "}";
     }
 }

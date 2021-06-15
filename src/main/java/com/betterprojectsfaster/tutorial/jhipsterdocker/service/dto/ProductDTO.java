@@ -1,15 +1,16 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
-import javax.persistence.Lob;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.enumeration.ProductCategory;
+import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Lob;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Product} entity.
  */
 public class ProductDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
@@ -20,15 +21,14 @@ public class ProductDTO implements Serializable {
     @DecimalMin(value = "0")
     private Float price;
 
-    
     @Lob
     private String description;
 
-    
     @Lob
     private byte[] picture;
 
     private String pictureContentType;
+
     @Lob
     private byte[] specification;
 
@@ -39,7 +39,6 @@ public class ProductDTO implements Serializable {
     @Min(value = 0)
     private Integer inventory;
 
-    
     public Long getId() {
         return id;
     }
@@ -129,12 +128,16 @@ public class ProductDTO implements Serializable {
             return false;
         }
 
-        return id != null && id.equals(((ProductDTO) o).id);
+        ProductDTO productDTO = (ProductDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, productDTO.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(this.id);
     }
 
     // prettier-ignore

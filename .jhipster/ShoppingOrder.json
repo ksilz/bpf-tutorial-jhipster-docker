@@ -5,14 +5,14 @@
       "fieldName": "name",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique", "minlength", "maxlength"],
-      "fieldValidateRulesMinlength": 2,
-      "fieldValidateRulesMaxlength": 90
+      "fieldValidateRulesMinlength": "2",
+      "fieldValidateRulesMaxlength": "90"
     },
     {
       "fieldName": "totalAmount",
       "fieldType": "Float",
       "fieldValidateRules": ["min"],
-      "fieldValidateRulesMin": 0
+      "fieldValidateRulesMin": "0"
     },
     {
       "fieldName": "ordered",
@@ -39,16 +39,18 @@
       "otherEntityName": "shipment",
       "otherEntityRelationshipName": "order",
       "relationshipName": "shipment",
+      "otherEntityField": "shippedAt",
       "ownerSide": false
     }
   ],
-  "changelogDate": "20190801122747",
   "entityTableName": "shopping_order",
   "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
-  "clientRootFolder": "",
-  "applications": ["my_simple_shop"]
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["my_simple_shop"],
+  "changelogDate": "20210615120530"
 }

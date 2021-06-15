@@ -1,14 +1,12 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.io.Serializable;
 import java.time.LocalDate;
+import javax.persistence.*;
+import javax.validation.constraints.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Shipment.
@@ -29,6 +27,7 @@ public class Shipment implements Serializable {
     @Column(name = "shipped_at", nullable = false)
     private LocalDate shippedAt;
 
+    @JsonIgnoreProperties(value = { "orders", "buyer", "shipment" }, allowSetters = true)
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
@@ -36,7 +35,6 @@ public class Shipment implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "shipments", allowSetters = true)
     private User shippedBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -48,8 +46,13 @@ public class Shipment implements Serializable {
         this.id = id;
     }
 
+    public Shipment id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public LocalDate getShippedAt() {
-        return shippedAt;
+        return this.shippedAt;
     }
 
     public Shipment shippedAt(LocalDate shippedAt) {
@@ -62,11 +65,11 @@ public class Shipment implements Serializable {
     }
 
     public ShoppingOrder getOrder() {
-        return order;
+        return this.order;
     }
 
     public Shipment order(ShoppingOrder shoppingOrder) {
-        this.order = shoppingOrder;
+        this.setOrder(shoppingOrder);
         return this;
     }
 
@@ -75,17 +78,18 @@ public class Shipment implements Serializable {
     }
 
     public User getShippedBy() {
-        return shippedBy;
+        return this.shippedBy;
     }
 
     public Shipment shippedBy(User user) {
-        this.shippedBy = user;
+        this.setShippedBy(user);
         return this;
     }
 
     public void setShippedBy(User user) {
         this.shippedBy = user;
     }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -101,7 +105,8 @@ public class Shipment implements Serializable {
 
     @Override
     public int hashCode() {
-        return 31;
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
     }
 
     // prettier-ignore

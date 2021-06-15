@@ -1,26 +1,16 @@
-import { Moment } from 'moment';
+import dayjs from 'dayjs';
 import { IProductOrder } from 'app/shared/model/product-order.model';
+import { IUser } from 'app/shared/model/user.model';
+import { IShipment } from 'app/shared/model/shipment.model';
 
 export interface IShoppingOrder {
   id?: number;
   name?: string;
-  totalAmount?: number;
-  ordered?: Moment;
-  orders?: IProductOrder[];
-  buyerLogin?: string;
-  buyerId?: number;
-  shipmentId?: number;
+  totalAmount?: number | null;
+  ordered?: string | null;
+  orders?: IProductOrder[] | null;
+  buyer?: IUser;
+  shipment?: IShipment | null;
 }
 
-export class ShoppingOrder implements IShoppingOrder {
-  constructor(
-    public id?: number,
-    public name?: string,
-    public totalAmount?: number,
-    public ordered?: Moment,
-    public orders?: IProductOrder[],
-    public buyerLogin?: string,
-    public buyerId?: number,
-    public shipmentId?: number
-  ) {}
-}
+export const defaultValue: Readonly<IShoppingOrder> = {};

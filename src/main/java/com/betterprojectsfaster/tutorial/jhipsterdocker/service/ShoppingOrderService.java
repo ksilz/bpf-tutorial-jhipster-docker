@@ -1,7 +1,6 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service;
 
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.ShoppingOrderDTO;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import java.util.Optional;
  * Service Interface for managing {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.ShoppingOrder}.
  */
 public interface ShoppingOrderService {
-
     /**
      * Save a shoppingOrder.
      *
@@ -17,6 +15,14 @@ public interface ShoppingOrderService {
      * @return the persisted entity.
      */
     ShoppingOrderDTO save(ShoppingOrderDTO shoppingOrderDTO);
+
+    /**
+     * Partially updates a shoppingOrder.
+     *
+     * @param shoppingOrderDTO the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<ShoppingOrderDTO> partialUpdate(ShoppingOrderDTO shoppingOrderDTO);
 
     /**
      * Get all the shoppingOrders.
@@ -30,7 +36,6 @@ public interface ShoppingOrderService {
      * @return the {@link List} of entities.
      */
     List<ShoppingOrderDTO> findAllWhereShipmentIsNull();
-
 
     /**
      * Get the "id" shoppingOrder.

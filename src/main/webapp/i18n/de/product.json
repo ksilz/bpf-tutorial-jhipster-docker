@@ -3,9 +3,10 @@
     "product": {
       "home": {
         "title": "Products",
+        "refreshListLabel": "Liste aktualisieren",
         "createLabel": "Product erstellen",
         "createOrEditLabel": "Product erstellen oder bearbeiten",
-        "notFound": "No Products found"
+        "notFound": "Keine Products gefunden"
       },
       "created": "Product erstellt mit ID {{ param }}",
       "updated": "Product aktualisiert mit ID {{ param }}",
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Product"
       },
+      "id": "ID",
       "name": "Name",
       "price": "Price",
       "description": "Description",

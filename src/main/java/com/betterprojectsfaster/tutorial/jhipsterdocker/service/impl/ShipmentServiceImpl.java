@@ -1,20 +1,18 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.impl;
 
-import com.betterprojectsfaster.tutorial.jhipsterdocker.service.ShipmentService;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Shipment;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.repository.ShipmentRepository;
+import com.betterprojectsfaster.tutorial.jhipsterdocker.service.ShipmentService;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.ShipmentDTO;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.mapper.ShipmentMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service Implementation for managing {@link Shipment}.
@@ -43,21 +41,33 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
+    public Optional<ShipmentDTO> partialUpdate(ShipmentDTO shipmentDTO) {
+        log.debug("Request to partially update Shipment : {}", shipmentDTO);
+
+        return shipmentRepository
+            .findById(shipmentDTO.getId())
+            .map(
+                existingShipment -> {
+                    shipmentMapper.partialUpdate(existingShipment, shipmentDTO);
+                    return existingShipment;
+                }
+            )
+            .map(shipmentRepository::save)
+            .map(shipmentMapper::toDto);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<ShipmentDTO> findAll() {
         log.debug("Request to get all Shipments");
-        return shipmentRepository.findAll().stream()
-            .map(shipmentMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        return shipmentRepository.findAll().stream().map(shipmentMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
-
 
     @Override
     @Transactional(readOnly = true)
     public Optional<ShipmentDTO> findOne(Long id) {
         log.debug("Request to get Shipment : {}", id);
-        return shipmentRepository.findById(id)
-            .map(shipmentMapper::toDto);
+        return shipmentRepository.findById(id).map(shipmentMapper::toDto);
     }
 
     @Override

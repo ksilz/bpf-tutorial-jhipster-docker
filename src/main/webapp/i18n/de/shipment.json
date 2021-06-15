@@ -3,9 +3,10 @@
     "shipment": {
       "home": {
         "title": "Shipments",
+        "refreshListLabel": "Liste aktualisieren",
         "createLabel": "Shipment erstellen",
         "createOrEditLabel": "Shipment erstellen oder bearbeiten",
-        "notFound": "No Shipments found"
+        "notFound": "Keine Shipments gefunden"
       },
       "created": "Shipment erstellt mit ID {{ param }}",
       "updated": "Shipment aktualisiert mit ID {{ param }}",
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Shipment"
       },
+      "id": "ID",
       "shippedAt": "Shipped At",
       "order": "Order",
       "shippedBy": "Shipped By"

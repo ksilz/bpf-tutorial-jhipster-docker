@@ -1,7 +1,6 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service;
 
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.ShipmentDTO;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +8,6 @@ import java.util.Optional;
  * Service Interface for managing {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Shipment}.
  */
 public interface ShipmentService {
-
     /**
      * Save a shipment.
      *
@@ -19,12 +17,19 @@ public interface ShipmentService {
     ShipmentDTO save(ShipmentDTO shipmentDTO);
 
     /**
+     * Partially updates a shipment.
+     *
+     * @param shipmentDTO the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<ShipmentDTO> partialUpdate(ShipmentDTO shipmentDTO);
+
+    /**
      * Get all the shipments.
      *
      * @return the list of entities.
      */
     List<ShipmentDTO> findAll();
-
 
     /**
      * Get the "id" shipment.

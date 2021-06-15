@@ -3,9 +3,10 @@
     "address": {
       "home": {
         "title": "Addresses",
+        "refreshListLabel": "Liste aktualisieren",
         "createLabel": "Address erstellen",
         "createOrEditLabel": "Address erstellen oder bearbeiten",
-        "notFound": "No Addresses found"
+        "notFound": "Keine Addresses gefunden"
       },
       "created": "Address erstellt mit ID {{ param }}",
       "updated": "Address aktualisiert mit ID {{ param }}",
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Address"
       },
+      "id": "ID",
       "addressLine1": "Address Line 1",
       "addressLine2": "Address Line 2",
       "city": "City",

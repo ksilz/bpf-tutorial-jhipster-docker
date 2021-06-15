@@ -1,28 +1,24 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
 
-import java.time.LocalDate;
-import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Shipment} entity.
  */
 public class ShipmentDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
     private LocalDate shippedAt;
 
+    private ShoppingOrderDTO order;
 
-    private Long orderId;
+    private UserDTO shippedBy;
 
-    private String orderName;
-
-    private Long shippedById;
-
-    private String shippedByLogin;
-    
     public Long getId() {
         return id;
     }
@@ -39,36 +35,20 @@ public class ShipmentDTO implements Serializable {
         this.shippedAt = shippedAt;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public ShoppingOrderDTO getOrder() {
+        return order;
     }
 
-    public void setOrderId(Long shoppingOrderId) {
-        this.orderId = shoppingOrderId;
+    public void setOrder(ShoppingOrderDTO order) {
+        this.order = order;
     }
 
-    public String getOrderName() {
-        return orderName;
+    public UserDTO getShippedBy() {
+        return shippedBy;
     }
 
-    public void setOrderName(String shoppingOrderName) {
-        this.orderName = shoppingOrderName;
-    }
-
-    public Long getShippedById() {
-        return shippedById;
-    }
-
-    public void setShippedById(Long userId) {
-        this.shippedById = userId;
-    }
-
-    public String getShippedByLogin() {
-        return shippedByLogin;
-    }
-
-    public void setShippedByLogin(String userLogin) {
-        this.shippedByLogin = userLogin;
+    public void setShippedBy(UserDTO shippedBy) {
+        this.shippedBy = shippedBy;
     }
 
     @Override
@@ -80,12 +60,16 @@ public class ShipmentDTO implements Serializable {
             return false;
         }
 
-        return id != null && id.equals(((ShipmentDTO) o).id);
+        ShipmentDTO shipmentDTO = (ShipmentDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, shipmentDTO.id);
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(this.id);
     }
 
     // prettier-ignore
@@ -94,10 +78,8 @@ public class ShipmentDTO implements Serializable {
         return "ShipmentDTO{" +
             "id=" + getId() +
             ", shippedAt='" + getShippedAt() + "'" +
-            ", orderId=" + getOrderId() +
-            ", orderName='" + getOrderName() + "'" +
-            ", shippedById=" + getShippedById() +
-            ", shippedByLogin='" + getShippedByLogin() + "'" +
+            ", order=" + getOrder() +
+            ", shippedBy=" + getShippedBy() +
             "}";
     }
 }

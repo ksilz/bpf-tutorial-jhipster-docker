@@ -1,13 +1,14 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto;
 
-import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.TestUtil;
 
-public class ShipmentDTOTest {
+import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.TestUtil;
+import org.junit.jupiter.api.Test;
+
+class ShipmentDTOTest {
 
     @Test
-    public void dtoEqualsVerifier() throws Exception {
+    void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(ShipmentDTO.class);
         ShipmentDTO shipmentDTO1 = new ShipmentDTO();
         shipmentDTO1.setId(1L);

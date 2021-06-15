@@ -1,0 +1,27 @@
+{
+  "mySimpleShopApp": {
+    "productOrder": {
+      "home": {
+        "title": "Product Orders",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Product Order",
+        "createOrEditLabel": "Создать или отредактировать Product Order",
+        "notFound": "Product Orders не найдено"
+      },
+      "created": "Новый Product Order создан с идентификатором {{ param }}",
+      "updated": "Product Order обновлен с идентификатором {{ param }}",
+      "deleted": "Product Order удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Product Order {{ id }}?"
+      },
+      "detail": {
+        "title": "Product Order"
+      },
+      "id": "ID",
+      "amount": "Amount",
+      "buyer": "Buyer",
+      "product": "Product",
+      "overallOrder": "Overall Order"
+    }
+  }
+}

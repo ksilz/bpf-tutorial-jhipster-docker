@@ -5,8 +5,8 @@
       "fieldName": "amount",
       "fieldType": "Integer",
       "fieldValidateRules": ["required", "min", "max"],
-      "fieldValidateRulesMin": 0,
-      "fieldValidateRulesMax": 5
+      "fieldValidateRulesMin": "0",
+      "fieldValidateRulesMax": "5"
     }
   ],
   "relationships": [
@@ -35,13 +35,14 @@
       "otherEntityField": "name"
     }
   ],
-  "changelogDate": "20190801122748",
   "entityTableName": "product_order",
   "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
-  "clientRootFolder": "",
-  "applications": ["my_simple_shop"]
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["my_simple_shop"],
+  "changelogDate": "20210615120630"
 }

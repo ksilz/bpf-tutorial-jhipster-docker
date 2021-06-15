@@ -3,6 +3,7 @@
     "shoppingOrder": {
       "home": {
         "title": "Shopping Orders",
+        "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Shopping Order",
         "createOrEditLabel": "Create or edit a Shopping Order",
         "notFound": "No Shopping Orders found"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Shopping Order"
       },
+      "id": "ID",
       "name": "Name",
       "totalAmount": "Total Amount",
       "ordered": "Ordered",

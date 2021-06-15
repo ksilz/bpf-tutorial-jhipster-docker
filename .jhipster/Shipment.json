@@ -26,13 +26,14 @@
       "otherEntityField": "login"
     }
   ],
-  "changelogDate": "20190801122749",
   "entityTableName": "shipment",
   "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
-  "clientRootFolder": "",
-  "applications": ["my_simple_shop"]
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["my_simple_shop"],
+  "changelogDate": "20210615120730"
 }

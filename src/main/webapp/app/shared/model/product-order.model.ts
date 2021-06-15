@@ -1,23 +1,13 @@
+import { IUser } from 'app/shared/model/user.model';
+import { IProduct } from 'app/shared/model/product.model';
+import { IShoppingOrder } from 'app/shared/model/shopping-order.model';
+
 export interface IProductOrder {
   id?: number;
   amount?: number;
-  buyerLogin?: string;
-  buyerId?: number;
-  productName?: string;
-  productId?: number;
-  overallOrderName?: string;
-  overallOrderId?: number;
+  buyer?: IUser;
+  product?: IProduct;
+  overallOrder?: IShoppingOrder;
 }
 
-export class ProductOrder implements IProductOrder {
-  constructor(
-    public id?: number,
-    public amount?: number,
-    public buyerLogin?: string,
-    public buyerId?: number,
-    public productName?: string,
-    public productId?: number,
-    public overallOrderName?: string,
-    public overallOrderId?: number
-  ) {}
-}
+export const defaultValue: Readonly<IProductOrder> = {};
