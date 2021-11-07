@@ -84,6 +84,7 @@
     "dayjs": "1.10.4",
     "loaders.css": "0.1.2",
     "lodash": "4.17.21",
+    "mkdirp": "^1.0.4",
     "path-browserify": "1.0.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
