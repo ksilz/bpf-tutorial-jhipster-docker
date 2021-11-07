@@ -19,6 +19,7 @@ public class Address implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @Column(name = "id")
     private Long id;
 
     @NotNull
@@ -43,17 +44,18 @@ public class Address implements Serializable {
     private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
     public Long getId() {
-        return id;
+        return this.id;
+    }
+
+    public Address id(Long id) {
+        this.setId(id);
+        return this;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Address id(Long id) {
-        this.id = id;
-        return this;
     }
 
     public String getAddressLine1() {
@@ -61,7 +63,7 @@ public class Address implements Serializable {
     }
 
     public Address addressLine1(String addressLine1) {
-        this.addressLine1 = addressLine1;
+        this.setAddressLine1(addressLine1);
         return this;
     }
 
@@ -74,7 +76,7 @@ public class Address implements Serializable {
     }
 
     public Address addressLine2(String addressLine2) {
-        this.addressLine2 = addressLine2;
+        this.setAddressLine2(addressLine2);
         return this;
     }
 
@@ -87,7 +89,7 @@ public class Address implements Serializable {
     }
 
     public Address city(String city) {
-        this.city = city;
+        this.setCity(city);
         return this;
     }
 
@@ -100,7 +102,7 @@ public class Address implements Serializable {
     }
 
     public Address postalCode(String postalCode) {
-        this.postalCode = postalCode;
+        this.setPostalCode(postalCode);
         return this;
     }
 
@@ -112,13 +114,13 @@ public class Address implements Serializable {
         return this.user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Address user(User user) {
         this.setUser(user);
         return this;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

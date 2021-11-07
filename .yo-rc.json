@@ -32,7 +32,7 @@
     "packageFolder": "com/betterprojectsfaster/tutorial/jhipsterdocker",
     "reactive": false,
     "skipServer": false,
-    "jhipsterVersion": "7.0.1",
+    "jhipsterVersion": "7.3.1",
     "entitySuffix": "",
     "entities": ["Product", "Address", "ShoppingOrder", "ProductOrder", "Shipment"],
     "skipCheckLengthOfIdentifier": false,
@@ -42,6 +42,8 @@
     "pages": [],
     "creationTimestamp": 1623758550955,
     "jwtSecretKey": "YjdiZjc2ZTE3NTY1ZGUzMmUxYTQ1MDQ1OGE0MmI2ZmI3Y2Y3MTM1YzkyY2M2MjlkZmU2MmMzMTJjMWM0NzM0ZmVmNDk1NDM1MjJiODE1OWFlMmIzNWRjZmQ3NzYwZWI3ZTcxZDI5NDZkNTFkNjEwZTM1YTE1M2VjODE0YTg2MTc=",
-    "lastLiquibaseTimestamp": 1623758850000
+    "lastLiquibaseTimestamp": 1623758850000,
+    "enableGradleEnterprise": false,
+    "devServerPort": 9060
   }
 }

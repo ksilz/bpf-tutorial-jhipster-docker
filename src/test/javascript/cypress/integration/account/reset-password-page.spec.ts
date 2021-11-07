@@ -8,6 +8,8 @@ import {
 } from '../../support/commands';
 
 describe('forgot your password', () => {
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+
   before(() => {
     cy.window().then(win => {
       win.sessionStorage.clear();
@@ -15,7 +17,7 @@ describe('forgot your password', () => {
     cy.clearCookies();
     cy.visit('');
     cy.clickOnLoginItem();
-    cy.get(usernameLoginSelector).type('admin');
+    cy.get(usernameLoginSelector).type(username);
     cy.get(forgetYourPasswordSelector).click();
   });
 
@@ -24,13 +26,16 @@ describe('forgot your password', () => {
   });
 
   it('requires email', () => {
-    cy.get(emailResetPasswordSelector).should('have.class', classInvalid).type('user@gmail.com').should('have.class', classValid);
+    cy.get(submitInitResetPasswordSelector).click({ force: true });
+    cy.get(emailResetPasswordSelector).should('have.class', classInvalid).type('user@gmail.com');
+    cy.get(submitInitResetPasswordSelector).click({ force: true });
+    cy.get(emailResetPasswordSelector).should('have.class', classValid);
     cy.get(emailResetPasswordSelector).clear();
   });
 
   it('should be able to init reset password', () => {
     cy.get(emailResetPasswordSelector).type('user@gmail.com');
     cy.get(submitInitResetPasswordSelector).click({ force: true });
-    cy.wait('@initResetPassword').then(({ request, response }) => expect(response.statusCode).to.equal(200));
+    cy.wait('@initResetPassword').then(({ response }) => expect(response.statusCode).to.equal(200));
   });
 });

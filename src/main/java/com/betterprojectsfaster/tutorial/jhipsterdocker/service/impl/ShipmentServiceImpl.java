@@ -46,12 +46,11 @@ public class ShipmentServiceImpl implements ShipmentService {
 
         return shipmentRepository
             .findById(shipmentDTO.getId())
-            .map(
-                existingShipment -> {
-                    shipmentMapper.partialUpdate(existingShipment, shipmentDTO);
-                    return existingShipment;
-                }
-            )
+            .map(existingShipment -> {
+                shipmentMapper.partialUpdate(existingShipment, shipmentDTO);
+
+                return existingShipment;
+            })
             .map(shipmentRepository::save)
             .map(shipmentMapper::toDto);
     }

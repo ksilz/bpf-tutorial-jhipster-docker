@@ -109,7 +109,7 @@ public class ShoppingOrderResource {
      * or with status {@code 500 (Internal Server Error)} if the shoppingOrderDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/shopping-orders/{id}", consumes = "application/merge-patch+json")
+    @PatchMapping(value = "/shopping-orders/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ShoppingOrderDTO> partialUpdateShoppingOrder(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody ShoppingOrderDTO shoppingOrderDTO

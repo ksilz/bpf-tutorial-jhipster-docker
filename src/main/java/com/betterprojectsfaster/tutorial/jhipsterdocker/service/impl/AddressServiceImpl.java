@@ -46,12 +46,11 @@ public class AddressServiceImpl implements AddressService {
 
         return addressRepository
             .findById(addressDTO.getId())
-            .map(
-                existingAddress -> {
-                    addressMapper.partialUpdate(existingAddress, addressDTO);
-                    return existingAddress;
-                }
-            )
+            .map(existingAddress -> {
+                addressMapper.partialUpdate(existingAddress, addressDTO);
+
+                return existingAddress;
+            })
             .map(addressRepository::save)
             .map(addressMapper::toDto);
     }

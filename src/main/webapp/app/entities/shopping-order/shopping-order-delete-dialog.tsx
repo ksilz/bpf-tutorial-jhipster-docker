@@ -1,35 +1,39 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getEntity, deleteEntity } from './shopping-order.reducer';
 
-export interface IShoppingOrderDeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
+export const ShoppingOrderDeleteDialog = (props: RouteComponentProps<{ id: string }>) => {
+  const [loadModal, setLoadModal] = useState(false);
+  const dispatch = useAppDispatch();
 
-export const ShoppingOrderDeleteDialog = (props: IShoppingOrderDeleteDialogProps) => {
   useEffect(() => {
-    props.getEntity(props.match.params.id);
+    dispatch(getEntity(props.match.params.id));
+    setLoadModal(true);
   }, []);
+
+  const shoppingOrderEntity = useAppSelector(state => state.shoppingOrder.entity);
+  const updateSuccess = useAppSelector(state => state.shoppingOrder.updateSuccess);
 
   const handleClose = () => {
     props.history.push('/shopping-order');
   };
 
   useEffect(() => {
-    if (props.updateSuccess) {
+    if (updateSuccess && loadModal) {
       handleClose();
+      setLoadModal(false);
     }
-  }, [props.updateSuccess]);
+  }, [updateSuccess]);
 
   const confirmDelete = () => {
-    props.deleteEntity(props.shoppingOrderEntity.id);
+    dispatch(deleteEntity(shoppingOrderEntity.id));
   };
 
-  const { shoppingOrderEntity } = props;
   return (
     <Modal isOpen toggle={handleClose}>
       <ModalHeader toggle={handleClose} data-cy="shoppingOrderDeleteDialogHeading">
@@ -56,14 +60,4 @@ export const ShoppingOrderDeleteDialog = (props: IShoppingOrderDeleteDialogProps
   );
 };
 
-const mapStateToProps = ({ shoppingOrder }: IRootState) => ({
-  shoppingOrderEntity: shoppingOrder.entity,
-  updateSuccess: shoppingOrder.updateSuccess,
-});
-
-const mapDispatchToProps = { getEntity, deleteEntity };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(ShoppingOrderDeleteDialog);
+export default ShoppingOrderDeleteDialog;

@@ -1,156 +1,121 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
-import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-
+import { IQueryParams, createEntitySlice, EntityState, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 import { IShoppingOrder, defaultValue } from 'app/shared/model/shopping-order.model';
 
-export const ACTION_TYPES = {
-  FETCH_SHOPPINGORDER_LIST: 'shoppingOrder/FETCH_SHOPPINGORDER_LIST',
-  FETCH_SHOPPINGORDER: 'shoppingOrder/FETCH_SHOPPINGORDER',
-  CREATE_SHOPPINGORDER: 'shoppingOrder/CREATE_SHOPPINGORDER',
-  UPDATE_SHOPPINGORDER: 'shoppingOrder/UPDATE_SHOPPINGORDER',
-  PARTIAL_UPDATE_SHOPPINGORDER: 'shoppingOrder/PARTIAL_UPDATE_SHOPPINGORDER',
-  DELETE_SHOPPINGORDER: 'shoppingOrder/DELETE_SHOPPINGORDER',
-  RESET: 'shoppingOrder/RESET',
-};
-
-const initialState = {
+const initialState: EntityState<IShoppingOrder> = {
   loading: false,
   errorMessage: null,
-  entities: [] as ReadonlyArray<IShoppingOrder>,
+  entities: [],
   entity: defaultValue,
   updating: false,
   updateSuccess: false,
-};
-
-export type ShoppingOrderState = Readonly<typeof initialState>;
-
-// Reducer
-
-export default (state: ShoppingOrderState = initialState, action): ShoppingOrderState => {
-  switch (action.type) {
-    case REQUEST(ACTION_TYPES.FETCH_SHOPPINGORDER_LIST):
-    case REQUEST(ACTION_TYPES.FETCH_SHOPPINGORDER):
-      return {
-        ...state,
-        errorMessage: null,
-        updateSuccess: false,
-        loading: true,
-      };
-    case REQUEST(ACTION_TYPES.CREATE_SHOPPINGORDER):
-    case REQUEST(ACTION_TYPES.UPDATE_SHOPPINGORDER):
-    case REQUEST(ACTION_TYPES.DELETE_SHOPPINGORDER):
-    case REQUEST(ACTION_TYPES.PARTIAL_UPDATE_SHOPPINGORDER):
-      return {
-        ...state,
-        errorMessage: null,
-        updateSuccess: false,
-        updating: true,
-      };
-    case FAILURE(ACTION_TYPES.FETCH_SHOPPINGORDER_LIST):
-    case FAILURE(ACTION_TYPES.FETCH_SHOPPINGORDER):
-    case FAILURE(ACTION_TYPES.CREATE_SHOPPINGORDER):
-    case FAILURE(ACTION_TYPES.UPDATE_SHOPPINGORDER):
-    case FAILURE(ACTION_TYPES.PARTIAL_UPDATE_SHOPPINGORDER):
-    case FAILURE(ACTION_TYPES.DELETE_SHOPPINGORDER):
-      return {
-        ...state,
-        loading: false,
-        updating: false,
-        updateSuccess: false,
-        errorMessage: action.payload,
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_SHOPPINGORDER_LIST):
-      return {
-        ...state,
-        loading: false,
-        entities: action.payload.data,
-      };
-    case SUCCESS(ACTION_TYPES.FETCH_SHOPPINGORDER):
-      return {
-        ...state,
-        loading: false,
-        entity: action.payload.data,
-      };
-    case SUCCESS(ACTION_TYPES.CREATE_SHOPPINGORDER):
-    case SUCCESS(ACTION_TYPES.UPDATE_SHOPPINGORDER):
-    case SUCCESS(ACTION_TYPES.PARTIAL_UPDATE_SHOPPINGORDER):
-      return {
-        ...state,
-        updating: false,
-        updateSuccess: true,
-        entity: action.payload.data,
-      };
-    case SUCCESS(ACTION_TYPES.DELETE_SHOPPINGORDER):
-      return {
-        ...state,
-        updating: false,
-        updateSuccess: true,
-        entity: {},
-      };
-    case ACTION_TYPES.RESET:
-      return {
-        ...initialState,
-      };
-    default:
-      return state;
-  }
 };
 
 const apiUrl = 'api/shopping-orders';
 
 // Actions
 
-export const getEntities: ICrudGetAllAction<IShoppingOrder> = (page, size, sort) => ({
-  type: ACTION_TYPES.FETCH_SHOPPINGORDER_LIST,
-  payload: axios.get<IShoppingOrder>(`${apiUrl}?cacheBuster=${new Date().getTime()}`),
+export const getEntities = createAsyncThunk('shoppingOrder/fetch_entity_list', async ({ page, size, sort }: IQueryParams) => {
+  const requestUrl = `${apiUrl}?cacheBuster=${new Date().getTime()}`;
+  return axios.get<IShoppingOrder[]>(requestUrl);
 });
 
-export const getEntity: ICrudGetAction<IShoppingOrder> = id => {
-  const requestUrl = `${apiUrl}/${id}`;
-  return {
-    type: ACTION_TYPES.FETCH_SHOPPINGORDER,
-    payload: axios.get<IShoppingOrder>(requestUrl),
-  };
-};
+export const getEntity = createAsyncThunk(
+  'shoppingOrder/fetch_entity',
+  async (id: string | number) => {
+    const requestUrl = `${apiUrl}/${id}`;
+    return axios.get<IShoppingOrder>(requestUrl);
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const createEntity: ICrudPutAction<IShoppingOrder> = entity => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.CREATE_SHOPPINGORDER,
-    payload: axios.post(apiUrl, cleanEntity(entity)),
-  });
-  dispatch(getEntities());
-  return result;
-};
+export const createEntity = createAsyncThunk(
+  'shoppingOrder/create_entity',
+  async (entity: IShoppingOrder, thunkAPI) => {
+    const result = await axios.post<IShoppingOrder>(apiUrl, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const updateEntity: ICrudPutAction<IShoppingOrder> = entity => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.UPDATE_SHOPPINGORDER,
-    payload: axios.put(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
-  });
-  return result;
-};
+export const updateEntity = createAsyncThunk(
+  'shoppingOrder/update_entity',
+  async (entity: IShoppingOrder, thunkAPI) => {
+    const result = await axios.put<IShoppingOrder>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const partialUpdate: ICrudPutAction<IShoppingOrder> = entity => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.PARTIAL_UPDATE_SHOPPINGORDER,
-    payload: axios.patch(`${apiUrl}/${entity.id}`, cleanEntity(entity)),
-  });
-  return result;
-};
+export const partialUpdateEntity = createAsyncThunk(
+  'shoppingOrder/partial_update_entity',
+  async (entity: IShoppingOrder, thunkAPI) => {
+    const result = await axios.patch<IShoppingOrder>(`${apiUrl}/${entity.id}`, cleanEntity(entity));
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const deleteEntity: ICrudDeleteAction<IShoppingOrder> = id => async dispatch => {
-  const requestUrl = `${apiUrl}/${id}`;
-  const result = await dispatch({
-    type: ACTION_TYPES.DELETE_SHOPPINGORDER,
-    payload: axios.delete(requestUrl),
-  });
-  dispatch(getEntities());
-  return result;
-};
+export const deleteEntity = createAsyncThunk(
+  'shoppingOrder/delete_entity',
+  async (id: string | number, thunkAPI) => {
+    const requestUrl = `${apiUrl}/${id}`;
+    const result = await axios.delete<IShoppingOrder>(requestUrl);
+    thunkAPI.dispatch(getEntities({}));
+    return result;
+  },
+  { serializeError: serializeAxiosError }
+);
 
-export const reset = () => ({
-  type: ACTION_TYPES.RESET,
+// slice
+
+export const ShoppingOrderSlice = createEntitySlice({
+  name: 'shoppingOrder',
+  initialState,
+  extraReducers(builder) {
+    builder
+      .addCase(getEntity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.entity = action.payload.data;
+      })
+      .addCase(deleteEntity.fulfilled, state => {
+        state.updating = false;
+        state.updateSuccess = true;
+        state.entity = {};
+      })
+      .addMatcher(isFulfilled(getEntities), (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          entities: action.payload.data,
+        };
+      })
+      .addMatcher(isFulfilled(createEntity, updateEntity, partialUpdateEntity), (state, action) => {
+        state.updating = false;
+        state.loading = false;
+        state.updateSuccess = true;
+        state.entity = action.payload.data;
+      })
+      .addMatcher(isPending(getEntities, getEntity), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.loading = true;
+      })
+      .addMatcher(isPending(createEntity, updateEntity, partialUpdateEntity, deleteEntity), state => {
+        state.errorMessage = null;
+        state.updateSuccess = false;
+        state.updating = true;
+      });
+  },
 });
+
+export const { reset } = ShoppingOrderSlice.actions;
+
+// Reducer
+export default ShoppingOrderSlice.reducer;

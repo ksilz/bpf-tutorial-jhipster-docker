@@ -1,6 +1,6 @@
 package com.betterprojectsfaster.tutorial.jhipsterdocker.service.mapper;
 
-import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.*;
+import com.betterprojectsfaster.tutorial.jhipsterdocker.domain.Shipment;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.ShipmentDTO;
 import org.mapstruct.*;
 

@@ -24,6 +24,7 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @Column(name = "id")
     private Long id;
 
     @NotNull
@@ -45,6 +46,7 @@ public class Product implements Serializable {
     @Column(name = "picture", nullable = false)
     private byte[] picture;
 
+    @NotNull
     @Column(name = "picture_content_type", nullable = false)
     private String pictureContentType;
 
@@ -70,17 +72,18 @@ public class Product implements Serializable {
     private Set<ProductOrder> productOrders = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
     public Long getId() {
-        return id;
+        return this.id;
+    }
+
+    public Product id(Long id) {
+        this.setId(id);
+        return this;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Product id(Long id) {
-        this.id = id;
-        return this;
     }
 
     public String getName() {
@@ -88,7 +91,7 @@ public class Product implements Serializable {
     }
 
     public Product name(String name) {
-        this.name = name;
+        this.setName(name);
         return this;
     }
 
@@ -101,7 +104,7 @@ public class Product implements Serializable {
     }
 
     public Product price(Float price) {
-        this.price = price;
+        this.setPrice(price);
         return this;
     }
 
@@ -114,7 +117,7 @@ public class Product implements Serializable {
     }
 
     public Product description(String description) {
-        this.description = description;
+        this.setDescription(description);
         return this;
     }
 
@@ -127,7 +130,7 @@ public class Product implements Serializable {
     }
 
     public Product picture(byte[] picture) {
-        this.picture = picture;
+        this.setPicture(picture);
         return this;
     }
 
@@ -153,7 +156,7 @@ public class Product implements Serializable {
     }
 
     public Product specification(byte[] specification) {
-        this.specification = specification;
+        this.setSpecification(specification);
         return this;
     }
 
@@ -179,7 +182,7 @@ public class Product implements Serializable {
     }
 
     public Product category(ProductCategory category) {
-        this.category = category;
+        this.setCategory(category);
         return this;
     }
 
@@ -192,7 +195,7 @@ public class Product implements Serializable {
     }
 
     public Product inventory(Integer inventory) {
-        this.inventory = inventory;
+        this.setInventory(inventory);
         return this;
     }
 
@@ -202,6 +205,16 @@ public class Product implements Serializable {
 
     public Set<ProductOrder> getProductOrders() {
         return this.productOrders;
+    }
+
+    public void setProductOrders(Set<ProductOrder> productOrders) {
+        if (this.productOrders != null) {
+            this.productOrders.forEach(i -> i.setProduct(null));
+        }
+        if (productOrders != null) {
+            productOrders.forEach(i -> i.setProduct(this));
+        }
+        this.productOrders = productOrders;
     }
 
     public Product productOrders(Set<ProductOrder> productOrders) {
@@ -219,16 +232,6 @@ public class Product implements Serializable {
         this.productOrders.remove(productOrder);
         productOrder.setProduct(null);
         return this;
-    }
-
-    public void setProductOrders(Set<ProductOrder> productOrders) {
-        if (this.productOrders != null) {
-            this.productOrders.forEach(i -> i.setProduct(null));
-        }
-        if (productOrders != null) {
-            productOrders.forEach(i -> i.setProduct(this));
-        }
-        this.productOrders = productOrders;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

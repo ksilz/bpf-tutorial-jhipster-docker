@@ -47,12 +47,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
         return shoppingOrderRepository
             .findById(shoppingOrderDTO.getId())
-            .map(
-                existingShoppingOrder -> {
-                    shoppingOrderMapper.partialUpdate(existingShoppingOrder, shoppingOrderDTO);
-                    return existingShoppingOrder;
-                }
-            )
+            .map(existingShoppingOrder -> {
+                shoppingOrderMapper.partialUpdate(existingShoppingOrder, shoppingOrderDTO);
+
+                return existingShoppingOrder;
+            })
             .map(shoppingOrderRepository::save)
             .map(shoppingOrderMapper::toDto);
     }
