@@ -46,12 +46,11 @@ public class ProductServiceImpl implements ProductService {
 
         return productRepository
             .findById(productDTO.getId())
-            .map(
-                existingProduct -> {
-                    productMapper.partialUpdate(existingProduct, productDTO);
-                    return existingProduct;
-                }
-            )
+            .map(existingProduct -> {
+                productMapper.partialUpdate(existingProduct, productDTO);
+
+                return existingProduct;
+            })
             .map(productRepository::save)
             .map(productMapper::toDto);
     }

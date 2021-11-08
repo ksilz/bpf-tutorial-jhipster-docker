@@ -21,6 +21,7 @@ public class Shipment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @Column(name = "id")
     private Long id;
 
     @NotNull
@@ -38,17 +39,18 @@ public class Shipment implements Serializable {
     private User shippedBy;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
     public Long getId() {
-        return id;
+        return this.id;
+    }
+
+    public Shipment id(Long id) {
+        this.setId(id);
+        return this;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Shipment id(Long id) {
-        this.id = id;
-        return this;
     }
 
     public LocalDate getShippedAt() {
@@ -56,7 +58,7 @@ public class Shipment implements Serializable {
     }
 
     public Shipment shippedAt(LocalDate shippedAt) {
-        this.shippedAt = shippedAt;
+        this.setShippedAt(shippedAt);
         return this;
     }
 
@@ -68,26 +70,26 @@ public class Shipment implements Serializable {
         return this.order;
     }
 
+    public void setOrder(ShoppingOrder shoppingOrder) {
+        this.order = shoppingOrder;
+    }
+
     public Shipment order(ShoppingOrder shoppingOrder) {
         this.setOrder(shoppingOrder);
         return this;
-    }
-
-    public void setOrder(ShoppingOrder shoppingOrder) {
-        this.order = shoppingOrder;
     }
 
     public User getShippedBy() {
         return this.shippedBy;
     }
 
+    public void setShippedBy(User user) {
+        this.shippedBy = user;
+    }
+
     public Shipment shippedBy(User user) {
         this.setShippedBy(user);
         return this;
-    }
-
-    public void setShippedBy(User user) {
-        this.shippedBy = user;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

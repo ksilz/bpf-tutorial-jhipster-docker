@@ -399,7 +399,6 @@ class ProductResourceIT {
         partialUpdatedProduct.setId(product.getId());
 
         partialUpdatedProduct
-            .description(UPDATED_DESCRIPTION)
             .specification(UPDATED_SPECIFICATION)
             .specificationContentType(UPDATED_SPECIFICATION_CONTENT_TYPE)
             .category(UPDATED_CATEGORY);
@@ -418,7 +417,7 @@ class ProductResourceIT {
         Product testProduct = productList.get(productList.size() - 1);
         assertThat(testProduct.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testProduct.getPrice()).isEqualTo(DEFAULT_PRICE);
-        assertThat(testProduct.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testProduct.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testProduct.getPicture()).isEqualTo(DEFAULT_PICTURE);
         assertThat(testProduct.getPictureContentType()).isEqualTo(DEFAULT_PICTURE_CONTENT_TYPE);
         assertThat(testProduct.getSpecification()).isEqualTo(UPDATED_SPECIFICATION);

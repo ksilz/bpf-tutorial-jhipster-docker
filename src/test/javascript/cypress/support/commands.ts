@@ -74,9 +74,19 @@ export const configurationPageHeadingSelector = '[data-cy="configurationPageHead
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
-export const classInvalid = 'av-invalid';
+export const classInvalid = 'is-invalid';
 
-export const classValid = 'av-valid';
+export const classValid = 'is-valid';
+
+Cypress.Commands.add('authenticatedRequest', (data: any) => {
+  const bearerToken = JSON.parse(sessionStorage.getItem(Cypress.env('jwtStorageName')));
+  return cy.request({
+    ...data,
+    auth: {
+      bearer: bearerToken,
+    },
+  });
+});
 
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.clickOnLoginItem();
@@ -87,11 +97,13 @@ Cypress.Commands.add('login', (username: string, password: string) => {
 
 declare global {
   namespace Cypress {
-    interface Chainable<Subject> {
+    interface Chainable {
       login(username: string, password: string): Cypress.Chainable;
+      authenticatedRequest(data: any): Cypress.Chainable;
     }
   }
 }
 
+import 'cypress-audit/commands';
 // Convert this to a module instead of script (allows import/export)
 export {};

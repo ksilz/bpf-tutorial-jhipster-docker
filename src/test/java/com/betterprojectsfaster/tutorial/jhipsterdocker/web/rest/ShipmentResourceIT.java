@@ -313,6 +313,8 @@ class ShipmentResourceIT {
         Shipment partialUpdatedShipment = new Shipment();
         partialUpdatedShipment.setId(shipment.getId());
 
+        partialUpdatedShipment.shippedAt(UPDATED_SHIPPED_AT);
+
         restShipmentMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedShipment.getId())
@@ -325,7 +327,7 @@ class ShipmentResourceIT {
         List<Shipment> shipmentList = shipmentRepository.findAll();
         assertThat(shipmentList).hasSize(databaseSizeBeforeUpdate);
         Shipment testShipment = shipmentList.get(shipmentList.size() - 1);
-        assertThat(testShipment.getShippedAt()).isEqualTo(DEFAULT_SHIPPED_AT);
+        assertThat(testShipment.getShippedAt()).isEqualTo(UPDATED_SHIPPED_AT);
     }
 
     @Test

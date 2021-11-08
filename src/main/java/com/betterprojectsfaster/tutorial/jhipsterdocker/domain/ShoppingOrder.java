@@ -23,6 +23,7 @@ public class ShoppingOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
+    @Column(name = "id")
     private Long id;
 
     @NotNull
@@ -51,17 +52,18 @@ public class ShoppingOrder implements Serializable {
     private Shipment shipment;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
+
     public Long getId() {
-        return id;
+        return this.id;
+    }
+
+    public ShoppingOrder id(Long id) {
+        this.setId(id);
+        return this;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public ShoppingOrder id(Long id) {
-        this.id = id;
-        return this;
     }
 
     public String getName() {
@@ -69,7 +71,7 @@ public class ShoppingOrder implements Serializable {
     }
 
     public ShoppingOrder name(String name) {
-        this.name = name;
+        this.setName(name);
         return this;
     }
 
@@ -82,7 +84,7 @@ public class ShoppingOrder implements Serializable {
     }
 
     public ShoppingOrder totalAmount(Float totalAmount) {
-        this.totalAmount = totalAmount;
+        this.setTotalAmount(totalAmount);
         return this;
     }
 
@@ -95,7 +97,7 @@ public class ShoppingOrder implements Serializable {
     }
 
     public ShoppingOrder ordered(LocalDate ordered) {
-        this.ordered = ordered;
+        this.setOrdered(ordered);
         return this;
     }
 
@@ -105,6 +107,16 @@ public class ShoppingOrder implements Serializable {
 
     public Set<ProductOrder> getOrders() {
         return this.orders;
+    }
+
+    public void setOrders(Set<ProductOrder> productOrders) {
+        if (this.orders != null) {
+            this.orders.forEach(i -> i.setOverallOrder(null));
+        }
+        if (productOrders != null) {
+            productOrders.forEach(i -> i.setOverallOrder(this));
+        }
+        this.orders = productOrders;
     }
 
     public ShoppingOrder orders(Set<ProductOrder> productOrders) {
@@ -124,18 +136,12 @@ public class ShoppingOrder implements Serializable {
         return this;
     }
 
-    public void setOrders(Set<ProductOrder> productOrders) {
-        if (this.orders != null) {
-            this.orders.forEach(i -> i.setOverallOrder(null));
-        }
-        if (productOrders != null) {
-            productOrders.forEach(i -> i.setOverallOrder(this));
-        }
-        this.orders = productOrders;
-    }
-
     public User getBuyer() {
         return this.buyer;
+    }
+
+    public void setBuyer(User user) {
+        this.buyer = user;
     }
 
     public ShoppingOrder buyer(User user) {
@@ -143,17 +149,8 @@ public class ShoppingOrder implements Serializable {
         return this;
     }
 
-    public void setBuyer(User user) {
-        this.buyer = user;
-    }
-
     public Shipment getShipment() {
         return this.shipment;
-    }
-
-    public ShoppingOrder shipment(Shipment shipment) {
-        this.setShipment(shipment);
-        return this;
     }
 
     public void setShipment(Shipment shipment) {
@@ -164,6 +161,11 @@ public class ShoppingOrder implements Serializable {
             shipment.setOrder(this);
         }
         this.shipment = shipment;
+    }
+
+    public ShoppingOrder shipment(Shipment shipment) {
+        this.setShipment(shipment);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

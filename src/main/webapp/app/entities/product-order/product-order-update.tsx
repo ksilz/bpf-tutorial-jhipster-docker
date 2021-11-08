@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, Row, Col, Label } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { Translate, translate } from 'react-jhipster';
+import { Button, Row, Col, FormText } from 'reactstrap';
+import { isNumber, Translate, translate, ValidatedField, ValidatedForm } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IRootState } from 'app/shared/reducers';
 
 import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
@@ -17,53 +14,67 @@ import { getEntity, updateEntity, createEntity, reset } from './product-order.re
 import { IProductOrder } from 'app/shared/model/product-order.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export interface IProductOrderUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
+export const ProductOrderUpdate = (props: RouteComponentProps<{ id: string }>) => {
+  const dispatch = useAppDispatch();
 
-export const ProductOrderUpdate = (props: IProductOrderUpdateProps) => {
   const [isNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { productOrderEntity, users, products, shoppingOrders, loading, updating } = props;
-
+  const users = useAppSelector(state => state.userManagement.users);
+  const products = useAppSelector(state => state.product.entities);
+  const shoppingOrders = useAppSelector(state => state.shoppingOrder.entities);
+  const productOrderEntity = useAppSelector(state => state.productOrder.entity);
+  const loading = useAppSelector(state => state.productOrder.loading);
+  const updating = useAppSelector(state => state.productOrder.updating);
+  const updateSuccess = useAppSelector(state => state.productOrder.updateSuccess);
   const handleClose = () => {
     props.history.push('/product-order');
   };
 
   useEffect(() => {
     if (isNew) {
-      props.reset();
+      dispatch(reset());
     } else {
-      props.getEntity(props.match.params.id);
+      dispatch(getEntity(props.match.params.id));
     }
 
-    props.getUsers();
-    props.getProducts();
-    props.getShoppingOrders();
+    dispatch(getUsers({}));
+    dispatch(getProducts({}));
+    dispatch(getShoppingOrders({}));
   }, []);
 
   useEffect(() => {
-    if (props.updateSuccess) {
+    if (updateSuccess) {
       handleClose();
     }
-  }, [props.updateSuccess]);
+  }, [updateSuccess]);
 
-  const saveEntity = (event, errors, values) => {
-    if (errors.length === 0) {
-      const entity = {
-        ...productOrderEntity,
-        ...values,
-        buyer: users.find(it => it.id.toString() === values.buyerId.toString()),
-        product: products.find(it => it.id.toString() === values.productId.toString()),
-        overallOrder: shoppingOrders.find(it => it.id.toString() === values.overallOrderId.toString()),
-      };
+  const saveEntity = values => {
+    const entity = {
+      ...productOrderEntity,
+      ...values,
+      buyer: users.find(it => it.id.toString() === values.buyer.toString()),
+      product: products.find(it => it.id.toString() === values.product.toString()),
+      overallOrder: shoppingOrders.find(it => it.id.toString() === values.overallOrder.toString()),
+    };
 
-      if (isNew) {
-        props.createEntity(entity);
-      } else {
-        props.updateEntity(entity);
-      }
+    if (isNew) {
+      dispatch(createEntity(entity));
+    } else {
+      dispatch(updateEntity(entity));
     }
   };
+
+  const defaultValues = () =>
+    isNew
+      ? {}
+      : {
+          ...productOrderEntity,
+          buyer: productOrderEntity?.buyer?.id,
+          product: productOrderEntity?.product?.id,
+          overallOrder: productOrderEntity?.overallOrder?.id,
+        };
 
   return (
     <div>
@@ -79,95 +90,91 @@ export const ProductOrderUpdate = (props: IProductOrderUpdateProps) => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <AvForm model={isNew ? {} : productOrderEntity} onSubmit={saveEntity}>
+            <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity}>
               {!isNew ? (
-                <AvGroup>
-                  <Label for="product-order-id">
-                    <Translate contentKey="global.field.id">ID</Translate>
-                  </Label>
-                  <AvInput id="product-order-id" type="text" className="form-control" name="id" required readOnly />
-                </AvGroup>
-              ) : null}
-              <AvGroup>
-                <Label id="amountLabel" for="product-order-amount">
-                  <Translate contentKey="mySimpleShopApp.productOrder.amount">Amount</Translate>
-                </Label>
-                <AvField
-                  id="product-order-amount"
-                  data-cy="amount"
-                  type="string"
-                  className="form-control"
-                  name="amount"
-                  validate={{
-                    required: { value: true, errorMessage: translate('entity.validation.required') },
-                    min: { value: 0, errorMessage: translate('entity.validation.min', { min: 0 }) },
-                    max: { value: 5, errorMessage: translate('entity.validation.max', { max: 5 }) },
-                    number: { value: true, errorMessage: translate('entity.validation.number') },
-                  }}
-                />
-              </AvGroup>
-              <AvGroup>
-                <Label for="product-order-buyer">
-                  <Translate contentKey="mySimpleShopApp.productOrder.buyer">Buyer</Translate>
-                </Label>
-                <AvInput id="product-order-buyer" data-cy="buyer" type="select" className="form-control" name="buyerId" required>
-                  <option value="" key="0" />
-                  {users
-                    ? users.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.login}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-                <AvFeedback>
-                  <Translate contentKey="entity.validation.required">This field is required.</Translate>
-                </AvFeedback>
-              </AvGroup>
-              <AvGroup>
-                <Label for="product-order-product">
-                  <Translate contentKey="mySimpleShopApp.productOrder.product">Product</Translate>
-                </Label>
-                <AvInput id="product-order-product" data-cy="product" type="select" className="form-control" name="productId" required>
-                  <option value="" key="0" />
-                  {products
-                    ? products.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.name}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-                <AvFeedback>
-                  <Translate contentKey="entity.validation.required">This field is required.</Translate>
-                </AvFeedback>
-              </AvGroup>
-              <AvGroup>
-                <Label for="product-order-overallOrder">
-                  <Translate contentKey="mySimpleShopApp.productOrder.overallOrder">Overall Order</Translate>
-                </Label>
-                <AvInput
-                  id="product-order-overallOrder"
-                  data-cy="overallOrder"
-                  type="select"
-                  className="form-control"
-                  name="overallOrderId"
+                <ValidatedField
+                  name="id"
                   required
-                >
-                  <option value="" key="0" />
-                  {shoppingOrders
-                    ? shoppingOrders.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.name}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-                <AvFeedback>
-                  <Translate contentKey="entity.validation.required">This field is required.</Translate>
-                </AvFeedback>
-              </AvGroup>
-              <Button tag={Link} id="cancel-save" to="/product-order" replace color="info">
+                  readOnly
+                  id="product-order-id"
+                  label={translate('global.field.id')}
+                  validate={{ required: true }}
+                />
+              ) : null}
+              <ValidatedField
+                label={translate('mySimpleShopApp.productOrder.amount')}
+                id="product-order-amount"
+                name="amount"
+                data-cy="amount"
+                type="text"
+                validate={{
+                  required: { value: true, message: translate('entity.validation.required') },
+                  min: { value: 0, message: translate('entity.validation.min', { min: 0 }) },
+                  max: { value: 5, message: translate('entity.validation.max', { max: 5 }) },
+                  validate: v => isNumber(v) || translate('entity.validation.number'),
+                }}
+              />
+              <ValidatedField
+                id="product-order-buyer"
+                name="buyer"
+                data-cy="buyer"
+                label={translate('mySimpleShopApp.productOrder.buyer')}
+                type="select"
+                required
+              >
+                <option value="" key="0" />
+                {users
+                  ? users.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.login}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
+              <ValidatedField
+                id="product-order-product"
+                name="product"
+                data-cy="product"
+                label={translate('mySimpleShopApp.productOrder.product')}
+                type="select"
+                required
+              >
+                <option value="" key="0" />
+                {products
+                  ? products.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.name}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
+              <ValidatedField
+                id="product-order-overallOrder"
+                name="overallOrder"
+                data-cy="overallOrder"
+                label={translate('mySimpleShopApp.productOrder.overallOrder')}
+                type="select"
+                required
+              >
+                <option value="" key="0" />
+                {shoppingOrders
+                  ? shoppingOrders.map(otherEntity => (
+                      <option value={otherEntity.id} key={otherEntity.id}>
+                        {otherEntity.name}
+                      </option>
+                    ))
+                  : null}
+              </ValidatedField>
+              <FormText>
+                <Translate contentKey="entity.validation.required">This field is required.</Translate>
+              </FormText>
+              <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/product-order" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
                 <span className="d-none d-md-inline">
@@ -180,7 +187,7 @@ export const ProductOrderUpdate = (props: IProductOrderUpdateProps) => {
                 &nbsp;
                 <Translate contentKey="entity.action.save">Save</Translate>
               </Button>
-            </AvForm>
+            </ValidatedForm>
           )}
         </Col>
       </Row>
@@ -188,27 +195,4 @@ export const ProductOrderUpdate = (props: IProductOrderUpdateProps) => {
   );
 };
 
-const mapStateToProps = (storeState: IRootState) => ({
-  users: storeState.userManagement.users,
-  products: storeState.product.entities,
-  shoppingOrders: storeState.shoppingOrder.entities,
-  productOrderEntity: storeState.productOrder.entity,
-  loading: storeState.productOrder.loading,
-  updating: storeState.productOrder.updating,
-  updateSuccess: storeState.productOrder.updateSuccess,
-});
-
-const mapDispatchToProps = {
-  getUsers,
-  getProducts,
-  getShoppingOrders,
-  getEntity,
-  updateEntity,
-  createEntity,
-  reset,
-};
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProductOrderUpdate);
+export default ProductOrderUpdate;

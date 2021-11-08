@@ -7,7 +7,6 @@ import com.betterprojectsfaster.tutorial.jhipsterdocker.service.MailService;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.UserService;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.AdminUserDTO;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.PasswordChangeDTO;
-import com.betterprojectsfaster.tutorial.jhipsterdocker.service.dto.UserDTO;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.errors.*;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.vm.KeyAndPasswordVM;
 import com.betterprojectsfaster.tutorial.jhipsterdocker.web.rest.vm.ManagedUserVM;

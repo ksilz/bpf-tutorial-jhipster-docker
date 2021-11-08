@@ -37,7 +37,7 @@ management:
       liveness:
         include: livenessState
       readiness:
-        include: readinessState,datasource
+        include: readinessState,db
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
   metrics:
@@ -159,8 +159,8 @@ jhipster:
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/.*
     management-include-pattern: ${server.servlet.context-path:}/management/.*
-    title: my_simple_shop API
-    description: my_simple_shop API documentation
+    title: My Simple Shop API
+    description: My Simple Shop API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:
