@@ -1,0 +1,92 @@
+application {
+  config {
+    baseName my_simple_shop
+    applicationType monolith
+    authenticationType jwt
+    buildTool maven
+    cacheProvider ehcache
+    clientFramework react
+    clientPackageManager npm
+    clientTheme litera
+    clientThemeVariant primary
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableHibernateCache true
+    enableTranslation true
+    jhiPrefix bpf
+    languages [en, de, ru]
+    messageBroker false
+    nativeLanguage en
+    packageName com.betterprojectsfaster.tutorial.jhipsterdocker
+    prodDatabaseType postgresql
+    reactive false
+    searchEngine false
+    serverPort 8080
+    skipClient false
+    skipServer false
+    skipUserManagement false
+    websocket spring-websocket
+    testFrameworks [cypress]
+  }
+  entities *
+}
+
+deployment {
+  deploymentType docker-compose
+  dockerRepositoryName "joedata"
+}
+
+entity Product {
+  name String required unique minlength(2) maxlength(90)
+  price Float required min(0)
+  description TextBlob required
+  picture ImageBlob required
+  specification Blob
+  category ProductCategory
+  inventory Integer required min(0)
+}
+
+enum ProductCategory {
+  Laptop, Desktop, Phone, Tablet, Accessory
+}
+
+entity Address {
+  addressLine1 String required minlength(2) maxlength(80)
+  addressLine2 String minlength(2) maxlength(80)
+  city String minlength(2) maxlength(80)
+  postalCode String minlength(5) maxlength(5)
+}
+
+entity ShoppingOrder {
+  name String required unique minlength(2) maxlength(90)
+  totalAmount Float min(0)
+  ordered LocalDate
+}
+
+entity ProductOrder {
+  amount Integer required min(0) max(5)
+}
+
+entity Shipment {
+  shippedAt LocalDate required
+}
+
+relationship OneToOne {
+  Shipment{order(name) required} to ShoppingOrder{shipment(shippedAt)}
+}
+
+relationship OneToMany {
+  ShoppingOrder{orders} to ProductOrder{overallOrder(name) required}
+}
+
+relationship ManyToOne {
+  ProductOrder{product(name) required} to Product
+  Address{user(login) required} to User
+  ProductOrder{buyer(login) required} to User
+  ShoppingOrder{buyer(login) required} to User
+  Shipment{shippedBy(login) required} to User
+}
+
+service * with serviceImpl
+dto * with mapstruct
